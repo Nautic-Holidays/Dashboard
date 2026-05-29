@@ -258,6 +258,8 @@ body{font-family:'Dosis',sans-serif;background:var(--bg);color:var(--tp);font-si
   #facture-html{padding:20px}
 }
 
+
+@media(max-width:600px){#saisie-grid{grid-template-columns:repeat(2,1fr)!important;}}
 </style>
 </head>
 <body>
@@ -302,17 +304,11 @@ body{font-family:'Dosis',sans-serif;background:var(--bg);color:var(--tp);font-si
 
 <!-- SUIVI 2026 -->
 <div class="pg" id="p-s26"><div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px"><div><div style="font-family:'Dosis',sans-serif;font-size:22px;font-weight:700;color:var(--oc)" id="suivi-title">Suivi CA 2026</div><div style="font-size:12px;color:var(--tm)">Objectif : battre le record mensuel historique</div></div></div>
-<div class="kg">
-  <div class="kc kao"><div class="kl">CA jan–mai réalisé</div><div class="kv">47 659 €</div><div class="ks">Prévu (période) : 54 816 €</div><span class="kd wn">−7 157 € (−13%)</span></div>
-  <div class="kc kag"><div class="kl">Performance période</div><div class="kv">87%</div><div class="ks">Jan–Mai = 32,3% du CA (pas 42%)</div><span class="kd pos">Retard réel modéré</span></div>
-  <div class="kc kaa"><div class="kl">Projection si 100% saison</div><div class="kv">162 392 €</div><div class="ks">Jun–Déc au prévisionnel</div><span class="kd wn">−7 157 € sous obj.</span></div>
-  <div class="kc kag"><div class="kl">67,7% du CA reste à faire</div><div class="kv">114 733 €</div><div class="ks">Juin à Décembre · Dont 26% Juil–Août</div><span class="kd pos">Haute saison décisive</span></div>
-</div>
-<div class="al good"><span>✅</span><div><strong>Lecture saisonnalisée :</strong> Jan–Mai ne représentent que <strong>32,3% du CA annuel</strong> dans ton prévisionnel (pas 41,7%). La performance réelle sur la période est de <strong>87%</strong>, pas 28%. L'écart à rattraper est de <strong>7 157 €</strong> — récupérable en haute saison.</div></div>
-<div class="al warn"><span>⚠</span><div>Mai très faible (4 090 € pour 12 240 € prévu, −67%). Juin–Août = <strong>34,4% du CA annuel</strong> (58 252 €) — ces 3 mois effacent le retard ou le creusent définitivement.</div></div>
+<div class="kg" id="s26-kpis"></div>
+<div id="s26-alertes"></div>
 <div class="card sec" id="saisie-card">
-  <div class="sh"><div class="st">✏️ Saisie mensuelle — CA réalisé TTC</div><div class="ss">Données sauvegardées localement dans le navigateur</div></div>
-  <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:8px;margin-bottom:12px" id="saisie-grid"></div>
+  <div class="sh"><div class="st">✏️ Saisie mensuelle — CA réalisé TTC</div><div class="ss">Données locales (navigateur) · Non synchronisées entre appareils</div></div>
+  <div style="display:grid;grid-template-columns:repeat(6,1fr);gap:8px;margin-bottom:12px" id="saisie-grid"></div>
   <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap">
     <button onclick="validerSaisie()" style="background:var(--oc);color:#fff;border:none;padding:8px 20px;border-radius:var(--rs);font-family:'Dosis',sans-serif;font-size:14px;font-weight:600;cursor:pointer">✅ Valider &amp; actualiser</button>
     <button onclick="cloturerAnnee()" style="background:#1f9fb7;color:#fff;border:none;padding:8px 16px;border-radius:var(--rs);font-family:'Dosis',sans-serif;font-size:13px;font-weight:600;cursor:pointer">🏁 Clôturer l'année</button>
@@ -992,7 +988,7 @@ body{font-family:'Dosis',sans-serif;background:var(--bg);color:var(--tp);font-si
     <div class="fld"><label>Adresse ligne 2 (optionnel)</label><input type="text" id="cli-adr2" placeholder="" oninput="render()"></div>
     <div class="fld-row">
       <div class="fld"><label>Code postal</label><input type="text" id="cli-cp" placeholder="" oninput="render();geocodeCp()" autocomplete="off"></div>
-      <div class="fld"><label>Ville</label><input type="text" id="cli-ville" placeholder="" oninput="render()"></div>
+      <div class="fld"><label>Ville</label><input type="text" id="cli-ville" placeholder="" oninput="render()" style="text-transform:uppercase"></div>
     </div>
     <div id="geo-suggestions" style="display:none;position:absolute;background:#fff;border:1.5px solid var(--oc);border-radius:8px;z-index:999;box-shadow:0 4px 16px rgba(20,121,173,.15);font-size:12px;font-family:'Dosis',sans-serif;max-height:180px;overflow-y:auto;left:14px;right:14px"></div>
     <div class="fld"><label>Email (optionnel)</label><input type="email" id="cli-email" placeholder="" oninput="render()"></div>
@@ -1398,7 +1394,7 @@ function render(){
         <div style="font-style:italic;color:#2d6a8a;font-size:13px;line-height:1.8">${note.replace(/\n/g,'<br>')}</div>
         <div style="margin-top:10px;padding-top:10px;border-top:1px solid rgba(20,121,173,.15);font-size:11.5px;color:#2d6a8a;line-height:1.8">
           Vous êtes satisfait de votre formation ? <strong>Laissez-nous un avis Google</strong> — cela nous aide énormément !<br>
-          <a href="https://g.page/r/CUejqR6z7BzgEAE/review" style="display:inline-block;margin-top:5px;background:#1479ad;color:#fff;padding:4px 14px;border-radius:20px;font-size:11px;text-decoration:none;font-weight:600">⭐ Déposer mon avis</a>
+          <a href="https://g.page/r/CUejqR6z7BzgEAE/review" style="display:inline-block;margin-top:5px;background:#1479ad;color:#fff;padding:4px 14px;border-radius:20px;font-size:11px;text-decoration:none;font-weight:600;outline:none;-webkit-tap-highlight-color:transparent">⭐ Déposer mon avis</a>
         </div>
       </div>` : ''}
       <div class="fh-footer">
@@ -1412,26 +1408,75 @@ function render(){
 
 // ── PDF ────────────────────────────────────────────────────────────────
 function downloadPDF(){
-  const num = document.getElementById('doc-num').value || 'document';
-  const cli = document.getElementById('cli-nom').value || 'client';
-  const filename = (docType+'-'+num+'-'+cli+'.pdf').replace(/\s+/g,'-');
-  const outer = document.getElementById('facture-html');
-  const inner = outer.querySelector('#facture-html') || outer;
-  const allCss = Array.from(document.styleSheets).map(function(ss){
-    try{ return Array.from(ss.cssRules).map(function(r){ return r.cssText; }).join('\n'); }
-    catch(e){ return ''; }
-  }).join('\n');
-  const compactCss = '#facture-html{padding:20px 28px!important}.fh-header{margin-bottom:14px!important}.fh-divider{margin:10px 0!important}.fh-parties{margin-bottom:14px!important}.fh-table{margin-bottom:10px!important}.fh-totaux{margin-bottom:12px!important}.fh-conditions{margin-bottom:8px!important}.fh-validity{font-size:10px!important}';
-  const htmlStr = '<html><head><style>'+allCss+compactCss+'</style></head><body style="margin:0;padding:0">'+inner.outerHTML+'</body></html>';
-  const opt = {
-    margin: [5,5,5,5],
-    filename: filename,
-    image: {type:'jpeg', quality:0.98},
-    html2canvas: {scale:2, useCORS:true, letterRendering:true},
-    jsPDF: {unit:'mm', format:'a4', orientation:'portrait'},
-    pagebreak: {mode:'avoid-all'}
-  };
-  html2pdf().set(opt).from(htmlStr,'string').save();
+  var num = document.getElementById('doc-num').value || 'document';
+  var cli = document.getElementById('cli-nom').value || 'client';
+  var filename = (docType+'-'+num+'-'+cli+'.pdf').replace(/\s+/g,'-');
+  var outer = document.getElementById('facture-html');
+  var inner = outer.querySelector('#facture-html') || outer;
+
+  // Créer un wrapper invisible positionné en haut à gauche
+  var wrap = document.createElement('div');
+  wrap.style.cssText = 'position:fixed;top:0;left:-9999px;width:700px;background:#fff;z-index:-1;overflow:hidden';
+  var clone = inner.cloneNode(true);
+  // Réinitialiser tous les styles du clone pour un rendu propre
+  clone.removeAttribute('style');
+  clone.removeAttribute('id');
+  clone.style.cssText = 'width:700px;padding:18px 24px;font-family:\'Dosis\',sans-serif;font-size:13px;color:#1a1a2e;background:#fff;box-sizing:border-box';
+
+  // Compacter les sections pour tenir sur 1 page
+  var style = document.createElement('style');
+  style.textContent = [
+    '.fh-header{margin-bottom:12px!important}',
+    '.fh-divider{margin:8px 0!important}',
+    '.fh-parties{margin-bottom:12px!important}',
+    '.fh-table{margin-bottom:8px!important}',
+    '.fh-totaux{margin-bottom:10px!important}',
+    '.fh-conditions{margin-bottom:6px!important;font-size:11px!important}',
+    '.fh-rib{margin-bottom:6px!important;font-size:11px!important}',
+    '.fh-note{padding:8px 12px!important;font-size:11px!important}',
+    '.fh-footer{padding-top:8px!important;font-size:10px!important}',
+    '.fh-footer-avis{font-size:10px!important}',
+    '.fh-validity{font-size:10px!important}',
+    '.fh-logo img{max-height:48px!important}',
+    '.fh-doc-type{font-size:28px!important}',
+    '.fh-table table th,.fh-table table td{padding:6px 8px!important;font-size:12px!important}',
+    '.fh-totaux{width:220px!important}',
+    '.review-btn{padding:3px 10px!important;font-size:10px!important}'
+  ].join('');
+
+  wrap.appendChild(style);
+  wrap.appendChild(clone);
+  document.body.appendChild(wrap);
+
+  var img = clone.querySelector('img');
+  function doExport(){
+    var opt = {
+      margin: [8,8,8,8],
+      filename: filename,
+      image: {type:'jpeg', quality:0.98},
+      html2canvas: {
+        scale: 2,
+        useCORS: true,
+        letterRendering: true,
+        logging: false,
+        scrollX: 0,
+        scrollY: 0
+      },
+      jsPDF: {unit:'mm', format:'a4', orientation:'portrait'},
+      pagebreak: {mode:'avoid-all'}
+    };
+    html2pdf().set(opt).from(clone).save().then(function(){
+      document.body.removeChild(wrap);
+    }).catch(function(e){
+      document.body.removeChild(wrap);
+    });
+  }
+  if(img && !img.complete){
+    img.onload = function(){ setTimeout(doExport, 50); };
+    img.onerror = doExport;
+  } else {
+    setTimeout(doExport, 150);
+  }
 }
 
 function getFormData(){
@@ -1440,66 +1485,100 @@ function getFormData(){
     num: document.getElementById('doc-num').value,
     date: document.getElementById('doc-date').value,
     validity: document.getElementById('doc-validity').value,
-    projet: document.getElementById('doc-projet').value,
-    desc: document.getElementById('doc-desc').value,
+    projet: document.getElementById('doc-projet') ? document.getElementById('doc-projet').value : '',
+    desc: document.getElementById('doc-desc') ? document.getElementById('doc-desc').value : '',
     cliNom: document.getElementById('cli-nom').value,
     cliAdr1: document.getElementById('cli-adr1').value,
     cliAdr2: document.getElementById('cli-adr2') ? document.getElementById('cli-adr2').value : '',
     cliCp: document.getElementById('cli-cp').value,
-    cliVille: document.getElementById('cli-ville').value,
+    cliVille: (document.getElementById('cli-ville').value||'').toUpperCase(),
     cliEmail: document.getElementById('cli-email').value,
     note: document.getElementById('doc-note').value,
     timbreOn: document.getElementById('timbre-check').checked,
     timbreVal: document.getElementById('timbre-val').value,
-    lines: [...lines],
+    lines: window.fac_lines ? [...window.fac_lines] : [...lines],
     savedAt: new Date().toISOString()
   };
 }
 
 function saveDocument(){
-  const data = getFormData();
-  const key = 'nh_doc_' + (data.num || Date.now());
-  try{ localStorage.setItem(key, JSON.stringify(data)); }catch(e){}
-  loadSavedList();
-  const btn = document.querySelector('.btn-secondary');
-  btn.textContent = '✅ Sauvegardé !';
-  setTimeout(()=>btn.textContent='💾 Sauvegarder', 2000);
+  try{
+    const data = getFormData();
+    const key = 'nh_doc_' + (data.num || Date.now());
+    localStorage.setItem(key, JSON.stringify(data));
+    loadSavedList();
+    const btn = document.querySelector('.btn-secondary');
+    if(btn){ btn.textContent='✅ Sauvegardé !'; setTimeout(function(){ btn.textContent='💾 Sauvegarder'; },2000); }
+
+  }catch(e){ alert('Erreur sauvegarde : '+e.message); }
+}
+
+function resetFormSilent(){
+  // Reset sans confirmation
+  docType = 'FACTURE';
+  document.getElementById('btn-facture').classList.add('active');
+  document.getElementById('btn-devis').classList.remove('active');
+  document.getElementById('validity-field').style.display = 'none';
+  document.getElementById('doc-num').value = '';
+  const today = new Date();
+  document.getElementById('doc-date').value = today.toISOString().split('T')[0];
+  const validity = new Date(today); validity.setDate(validity.getDate()+30);
+  document.getElementById('doc-validity').value = validity.toISOString().split('T')[0];
+  if(document.getElementById('doc-projet')) document.getElementById('doc-projet').value = '';
+  if(document.getElementById('doc-desc')) document.getElementById('doc-desc').value = '';
+  document.getElementById('cli-nom').value = '';
+  document.getElementById('cli-adr1').value = '';
+  if(document.getElementById('cli-adr2')) document.getElementById('cli-adr2').value = '';
+  document.getElementById('cli-cp').value = '';
+  document.getElementById('cli-ville').value = '';
+  document.getElementById('cli-email').value = '';
+  document.getElementById('doc-note').value = "Merci de votre confiance,\nNous serons heureux de vous accueillir dans notre centre de formations !\nL'équipe Nautic Holidays.";
+  document.getElementById('timbre-check').checked = false;
+  document.getElementById('timbre-val').value = 78;
+  lines = [];
+  renderLines(); render();
+  // Reset dropdown custom
+  const lbl = document.getElementById('custom-select-label');
+  if(lbl) lbl.textContent = '— Choisir un produit —';
+  const sel = document.getElementById('product-select');
+  if(sel) sel.value = '';
 }
 
 function loadSavedList(){
   const list = document.getElementById('saved-list');
   if(!list) return;
   const docs = [];
-  for(let i=0; i<localStorage.length; i++){
-    const k = localStorage.key(i);
-    if(k && k.startsWith('nh_doc_')){
-      try{ docs.push({key:k, ...JSON.parse(localStorage.getItem(k))}); }catch(e){}
+  try{
+    for(let i=0; i<localStorage.length; i++){
+      const k = localStorage.key(i);
+      if(k && k.startsWith('nh_doc_')){
+        try{ const d=JSON.parse(localStorage.getItem(k)); docs.push(Object.assign({key:k},d)); }catch(e){}
+      }
     }
-  }
-  docs.sort((a,b)=>b.savedAt?.localeCompare(a.savedAt||'')||0);
+  }catch(e){ list.innerHTML='<div style="font-size:12px;color:#e74c3c;padding:8px">localStorage indisponible</div>'; return; }
+  docs.sort(function(a,b){ return (b.savedAt||'').localeCompare(a.savedAt||''); });
   if(!docs.length){ list.innerHTML='<div style="font-size:12px;color:var(--tm);text-align:center;padding:8px">Aucun document sauvegardé</div>'; return; }
-  list.innerHTML = docs.map(d=>`
-    <div class="saved-item">
-      <div class="si-info">
-        <div class="si-num">${d.docType} N°${d.num||'?'}</div>
-        <div class="si-client">${d.cliNom||'—'} · ${d.projet||''}</div>
-      </div>
-      <div class="si-actions">
-        <button class="si-btn si-load" onclick="loadDocument('${d.key}')">Ouvrir</button>
-        <button class="si-btn si-del" onclick="deleteDocument('${d.key}')">×</button>
-      </div>
-    </div>`).join('');
+  list.innerHTML = docs.map(function(d){
+    const dtype = d.docType||'?';
+    const num = d.num||'?';
+    const nom = d.cliNom||'—';
+    const proj = d.projet||'';
+    const key = d.key;
+    var safeKey = key.replace(/'/g,'&#39;');
+    return '<div class="saved-item"><div class="si-info"><div class="si-num">'+dtype+' N°'+num+'</div><div class="si-client">'+nom+(proj?' · '+proj:'')+'</div></div><div class="si-actions"><button class="si-btn si-load" onclick="loadDocument(&quot;'+safeKey+'&quot;)">Ouvrir</button><button class="si-btn si-del" onclick="deleteDocument(&quot;'+safeKey+'&quot;)">×</button></div></div>';
+  }).join('');
 }
 
 function loadDocument(key){
   try{
     const d = JSON.parse(localStorage.getItem(key));
+    if(!d){ alert('Document introuvable.'); return; }
     setType(d.docType||'FACTURE');
     document.getElementById('doc-num').value = d.num||'';
     document.getElementById('doc-date').value = d.date||'';
     document.getElementById('doc-validity').value = d.validity||'';
-    document.getElementById('doc-projet').value = d.projet||'';
-    document.getElementById('doc-desc').value = d.desc||'';
+    if(document.getElementById('doc-projet')) document.getElementById('doc-projet').value = d.projet||'';
+    if(document.getElementById('doc-desc')) document.getElementById('doc-desc').value = d.desc||'';
     document.getElementById('cli-nom').value = d.cliNom||'';
     document.getElementById('cli-adr1').value = d.cliAdr1||'';
     if(document.getElementById('cli-adr2')) document.getElementById('cli-adr2').value = d.cliAdr2||'';
@@ -1509,9 +1588,20 @@ function loadDocument(key){
     document.getElementById('doc-note').value = d.note||'';
     document.getElementById('timbre-check').checked = d.timbreOn||false;
     document.getElementById('timbre-val').value = d.timbreVal||78;
-    lines = d.lines||[];
-    renderLines(); render();
-  }catch(e){}
+    lines = (d.lines||[]).map(function(l){
+      return {desc: l.desc||'', qty: parseFloat(l.qty)||1, pu: parseFloat(l.pu)||0};
+    });
+    // Synchroniser fac_lines (utilisé par render() pour la prévisualisation)
+    if(window.fac_lines !== undefined){
+      window.fac_lines.length = 0;
+      lines.forEach(function(l){ window.fac_lines.push({desc:l.desc, qty:l.qty, pu:l.pu}); });
+    }
+    renderLines();
+    render();
+    // Remonter en haut du formulaire
+    const sidebar = document.querySelector('.sidebar');
+    if(sidebar) sidebar.scrollTop = 0;
+  }catch(e){ alert('Erreur chargement : '+e.message); }
 }
 
 function deleteDocument(key){
@@ -1521,20 +1611,7 @@ function deleteDocument(key){
 
 function resetForm(){
   if(!confirm('Créer un nouveau document (le formulaire sera vidé) ?')) return;
-  document.getElementById('doc-num').value='';
-  document.getElementById('doc-projet').value='';
-  document.getElementById('doc-desc').value='';
-  document.getElementById('cli-nom').value='';
-  document.getElementById('cli-adr1').value='';
-  if(document.getElementById('cli-adr2')) document.getElementById('cli-adr2').value='';
-  document.getElementById('cli-cp').value='';
-  document.getElementById('cli-ville').value='';
-  document.getElementById('cli-email').value='';
-  document.getElementById('timbre-check').checked=false;
-  lines=[];
-  const today=new Date();
-  document.getElementById('doc-date').value=today.toISOString().split('T')[0];
-  renderLines(); render();
+  resetFormSilent();
 }
 
 
@@ -1775,6 +1852,49 @@ function rGl(){
 }
 
 function rS26(){
+  // ── KPIs dynamiques ───────────────────────────────────────────
+  const mFd=D26.real.filter(v=>v!==null).length;
+  const tRd=D26.real.reduce((a,v)=>a+(v||0),0);
+  const tPd=D26.prev.reduce((a,v)=>a+v,0);
+  const pAdt=D26.prev.slice(0,mFd).reduce((a,v)=>a+v,0);
+  const perfP=mFd>0?(tRd/pAdt*100):0;
+  const poidsP=mFd>0?(pAdt/tPd*100):0;
+  const proj100=tRd+D26.prev.slice(mFd).reduce((a,v)=>a+v,0);
+  const ecart=tRd-pAdt;
+  const lastMoisNom=['','Jan','Fév','Mar','Avr','Mai','Jun','Jul','Aoû','Sep','Oct','Nov','Déc'][mFd]||'';
+  const resteP=(100-poidsP).toFixed(1);
+  const kpisEl=document.getElementById('s26-kpis');
+  if(kpisEl){
+    const kd1=ecart>=0?'pos':'wn'; const kd3=proj100>=tPd?'pos':'wn';
+    kpisEl.innerHTML=
+      '<div class="kc kao"><div class="kl">CA jan–'+lastMoisNom+' réalisé</div><div class="kv">'+tRd.toLocaleString('fr-FR')+' €</div><div class="ks">Prévu (période) : '+Math.round(pAdt).toLocaleString('fr-FR')+' €</div><span class="kd '+kd1+'">'+(ecart>=0?'+':'')+Math.round(ecart).toLocaleString('fr-FR')+' € ('+(ecart>=0?'+':'')+((ecart/pAdt)*100).toFixed(0)+'%)</span></div>'+
+      '<div class="kc kag"><div class="kl">Performance période</div><div class="kv">'+perfP.toFixed(0)+'%</div><div class="ks">Jan–'+lastMoisNom+' = '+poidsP.toFixed(1)+'% du CA (pas '+(mFd/12*100).toFixed(0)+'%)</div><span class="kd '+(perfP>=90?'pos':perfP>=75?'wn':'neg')+'">'+(perfP>=90?'En avance':perfP>=75?'Retard modéré':'Retard important')+'</span></div>'+
+      '<div class="kc kaa"><div class="kl">Projection si 100% saison</div><div class="kv">'+Math.round(proj100).toLocaleString('fr-FR')+' €</div><div class="ks">'+lastMoisNom+'–Déc au prévisionnel</div><span class="kd '+kd3+'">'+(proj100-tPd>=0?'+':'')+Math.round(proj100-tPd).toLocaleString('fr-FR')+' € vs obj.</span></div>'+
+      '<div class="kc kag"><div class="kl">'+resteP+'% du CA reste à faire</div><div class="kv">'+Math.round(tPd-tRd).toLocaleString('fr-FR')+' €</div><div class="ks">'+(mFd<12?D26.mois[mFd]:'—')+' à Déc · Dont 26% Juil–Août</div><span class="kd pos">Haute saison décisive</span></div>';
+  }
+  // ── Alertes dynamiques ───────────────────────────────────────────
+  const alertesEl=document.getElementById('s26-alertes');
+  if(alertesEl && mFd>0){
+    let html='';
+    // Alerte 1 : lecture saisonnalisée
+    const tempsPct=Math.round(mFd/12*100);
+    html+='<div class="al good"><span>✅</span><div><strong>Lecture saisonnalisée :</strong> Jan–'+lastMoisNom+' ne représentent que <strong>'+poidsP.toFixed(1)+'% du CA annuel</strong> dans ton prévisionnel (pas '+tempsPct+'%). La performance réelle sur la période est de <strong>'+perfP.toFixed(0)+'%</strong>, pas '+((tRd/tPd)*100).toFixed(0)+'%. L\'écart à rattraper est de <strong>'+(ecart<0?('−'+Math.abs(Math.round(ecart)).toLocaleString('fr-FR')):'+'+Math.round(ecart).toLocaleString('fr-FR'))+' €</strong>'+(ecart<0?' — récupérable en haute saison':' — en avance')+'.</div></div>';
+    // Alerte 2 : dernier mois saisi
+    const lastIdx=mFd-1;
+    const lastReal=D26.real[lastIdx]; const lastPrev=D26.prev[lastIdx];
+    if(lastReal!==null){
+      const lastPerf=Math.round(lastReal/lastPrev*100);
+      const lastNom=D26.mois[lastIdx];
+      const junAoutPrev=D26.prev.slice(5,8).reduce((a,v)=>a+v,0);
+      const junAoutPct=(junAoutPrev/tPd*100).toFixed(1);
+      if(lastPerf<75){
+        html+='<div class="al warn"><span>⚠</span><div>'+lastNom+' très faible ('+lastReal.toLocaleString('fr-FR')+' € pour '+lastPrev.toLocaleString('fr-FR')+' € prévu, −'+(100-lastPerf)+'%). Juin–Août = <strong>'+junAoutPct+'% du CA annuel</strong> ('+Math.round(junAoutPrev).toLocaleString('fr-FR')+' €) — ces 3 mois effacent le retard ou le creusent définitivement.</div></div>';
+      } else if(lastPerf>=100){
+        html+='<div class="al good"><span>🏆</span><div>'+lastNom+' <strong>record ou en avance</strong> ('+lastReal.toLocaleString('fr-FR')+' € pour '+lastPrev.toLocaleString('fr-FR')+' € prévu, +'+( lastReal-lastPrev).toLocaleString('fr-FR')+' €). Bonne dynamique à maintenir.</div></div>';
+      }
+    }
+    alertesEl.innerHTML=html;
+  }
   const bg=D26.real.map((v,i)=>v===null?'rgba(26,107,154,.2)':v>=D26.prev[i]?'rgba(26,188,156,.78)':'rgba(231,76,60,.75)');
   mk('c3','bar',{
     labels:D26.mois.map(m=>m.substring(0,3)),
@@ -1885,8 +2005,41 @@ const EMPRUNTS_INIT=[
 ];
 
 function getEmprunts(){
-  try{const s=localStorage.getItem('nh_emprunts');if(s)return JSON.parse(s);}catch(e){}
-  return JSON.parse(JSON.stringify(EMPRUNTS_INIT));
+  try{const s=localStorage.getItem('nh_emprunts');if(s){
+    const data=JSON.parse(s);
+    return autoUpdateEmprunts(data);
+  }}catch(e){}
+  return autoUpdateEmprunts(JSON.parse(JSON.stringify(EMPRUNTS_INIT)));
+}
+
+// Auto-actualise les capitaux restants selon les mois écoulés depuis la dernière sauvegarde
+function autoUpdateEmprunts(emps){
+  const now=new Date();
+  const nowKey=now.getFullYear()*12+now.getMonth(); // mois absolu courant
+  let changed=false;
+  emps.forEach(function(e){
+    if(!e.actif||e.restant<=0) return;
+    // Date de dernière mise à jour (stocker en YYYY-MM)
+    if(!e.lastUpdate){
+      // Pas de lastUpdate → référence = Déc 2025 (données certifiées SOGECA)
+      e.lastUpdate='2025-12';
+    }
+    const parts=e.lastUpdate.split('-');
+    const lastKey=parseInt(parts[0])*12+parseInt(parts[1])-1; // -1 car mois JS 0-indexé mais on stocke 1-indexé
+    const moisEcoules=nowKey-lastKey;
+    if(moisEcoules>0){
+      // Déduire les mensualités écoulées
+      const deduction=Math.min(e.mensualite*moisEcoules, e.restant);
+      e.restant=Math.max(0, Math.round((e.restant-deduction)*100)/100);
+      e.lastUpdate=now.getFullYear()+'-'+(now.getMonth()+1).toString().padStart(2,'0');
+      if(e.restant<=0){ e.restant=0; e.actif=false; }
+      changed=true;
+    }
+  });
+  if(changed){
+    try{localStorage.setItem('nh_emprunts',JSON.stringify(emps));}catch(err){}
+  }
+  return emps;
 }
 function saveEmprunts(e){try{localStorage.setItem('nh_emprunts',JSON.stringify(e));}catch(e){}}
 
@@ -2336,7 +2489,7 @@ function render(){
         <div style="font-style:italic;color:#2d6a8a;font-size:13px;line-height:1.8">${note.replace(/\n/g,'<br>')}</div>
         <div style="margin-top:10px;padding-top:10px;border-top:1px solid rgba(20,121,173,.15);font-size:11.5px;color:#2d6a8a;line-height:1.8">
           Vous êtes satisfait de votre formation ? <strong>Laissez-nous un avis Google</strong> — cela nous aide énormément !<br>
-          <a href="https://g.page/r/CUejqR6z7BzgEAE/review" style="display:inline-block;margin-top:5px;background:#1479ad;color:#fff;padding:4px 14px;border-radius:20px;font-size:11px;text-decoration:none;font-weight:600">⭐ Déposer mon avis</a>
+          <a href="https://g.page/r/CUejqR6z7BzgEAE/review" style="display:inline-block;margin-top:5px;background:#1479ad;color:#fff;padding:4px 14px;border-radius:20px;font-size:11px;text-decoration:none;font-weight:600;outline:none;-webkit-tap-highlight-color:transparent">⭐ Déposer mon avis</a>
         </div>
       </div>` : ''}
       <div class="fh-footer">
@@ -2350,26 +2503,75 @@ function render(){
 
 // ── PDF ────────────────────────────────────────────────────────────────
 function downloadPDF(){
-  const num = document.getElementById('doc-num').value || 'document';
-  const cli = document.getElementById('cli-nom').value || 'client';
-  const filename = (fac_docType+'-'+num+'-'+cli+'.pdf').replace(/\s+/g,'-');
-  const outer = document.getElementById('facture-html');
-  const inner = outer.querySelector('#facture-html') || outer;
-  const allCss = Array.from(document.styleSheets).map(function(ss){
-    try{ return Array.from(ss.cssRules).map(function(r){ return r.cssText; }).join('\n'); }
-    catch(e){ return ''; }
-  }).join('\n');
-  const compactCss = '#facture-html{padding:20px 28px!important}.fh-header{margin-bottom:14px!important}.fh-divider{margin:10px 0!important}.fh-parties{margin-bottom:14px!important}.fh-table{margin-bottom:10px!important}.fh-totaux{margin-bottom:12px!important}.fh-conditions{margin-bottom:8px!important}.fh-validity{font-size:10px!important}';
-  const htmlStr = '<html><head><style>'+allCss+compactCss+'</style></head><body style="margin:0;padding:0">'+inner.outerHTML+'</body></html>';
-  const opt = {
-    margin: [5,5,5,5],
-    filename: filename,
-    image: {type:'jpeg', quality:0.98},
-    html2canvas: {scale:2, useCORS:true, letterRendering:true},
-    jsPDF: {unit:'mm', format:'a4', orientation:'portrait'},
-    pagebreak: {mode:'avoid-all'}
-  };
-  html2pdf().set(opt).from(htmlStr,'string').save();
+  var num = document.getElementById('doc-num').value || 'document';
+  var cli = document.getElementById('cli-nom').value || 'client';
+  var filename = (fac_docType+'-'+num+'-'+cli+'.pdf').replace(/\s+/g,'-');
+  var outer = document.getElementById('facture-html');
+  var inner = outer.querySelector('#facture-html') || outer;
+
+  // Créer un wrapper invisible positionné en haut à gauche
+  var wrap = document.createElement('div');
+  wrap.style.cssText = 'position:fixed;top:0;left:-9999px;width:700px;background:#fff;z-index:-1;overflow:hidden';
+  var clone = inner.cloneNode(true);
+  // Réinitialiser tous les styles du clone pour un rendu propre
+  clone.removeAttribute('style');
+  clone.removeAttribute('id');
+  clone.style.cssText = 'width:700px;padding:18px 24px;font-family:\'Dosis\',sans-serif;font-size:13px;color:#1a1a2e;background:#fff;box-sizing:border-box';
+
+  // Compacter les sections pour tenir sur 1 page
+  var style = document.createElement('style');
+  style.textContent = [
+    '.fh-header{margin-bottom:12px!important}',
+    '.fh-divider{margin:8px 0!important}',
+    '.fh-parties{margin-bottom:12px!important}',
+    '.fh-table{margin-bottom:8px!important}',
+    '.fh-totaux{margin-bottom:10px!important}',
+    '.fh-conditions{margin-bottom:6px!important;font-size:11px!important}',
+    '.fh-rib{margin-bottom:6px!important;font-size:11px!important}',
+    '.fh-note{padding:8px 12px!important;font-size:11px!important}',
+    '.fh-footer{padding-top:8px!important;font-size:10px!important}',
+    '.fh-footer-avis{font-size:10px!important}',
+    '.fh-validity{font-size:10px!important}',
+    '.fh-logo img{max-height:48px!important}',
+    '.fh-doc-type{font-size:28px!important}',
+    '.fh-table table th,.fh-table table td{padding:6px 8px!important;font-size:12px!important}',
+    '.fh-totaux{width:220px!important}',
+    '.review-btn{padding:3px 10px!important;font-size:10px!important}'
+  ].join('');
+
+  wrap.appendChild(style);
+  wrap.appendChild(clone);
+  document.body.appendChild(wrap);
+
+  var img = clone.querySelector('img');
+  function doExport(){
+    var opt = {
+      margin: [8,8,8,8],
+      filename: filename,
+      image: {type:'jpeg', quality:0.98},
+      html2canvas: {
+        scale: 2,
+        useCORS: true,
+        letterRendering: true,
+        logging: false,
+        scrollX: 0,
+        scrollY: 0
+      },
+      jsPDF: {unit:'mm', format:'a4', orientation:'portrait'},
+      pagebreak: {mode:'avoid-all'}
+    };
+    html2pdf().set(opt).from(clone).save().then(function(){
+      document.body.removeChild(wrap);
+    }).catch(function(e){
+      document.body.removeChild(wrap);
+    });
+  }
+  if(img && !img.complete){
+    img.onload = function(){ setTimeout(doExport, 50); };
+    img.onerror = doExport;
+  } else {
+    setTimeout(doExport, 150);
+  }
 }
 
 function getFormData(){
@@ -2384,7 +2586,7 @@ function getFormData(){
     cliAdr1: document.getElementById('cli-adr1').value,
     cliAdr2: document.getElementById('cli-adr2') ? document.getElementById('cli-adr2').value : '',
     cliCp: document.getElementById('cli-cp').value,
-    cliVille: document.getElementById('cli-ville').value,
+    cliVille: (document.getElementById('cli-ville').value||'').toUpperCase(),
     cliEmail: document.getElementById('cli-email').value,
     note: document.getElementById('doc-note').value,
     timbreOn: document.getElementById('timbre-check').checked,
@@ -2392,69 +2594,6 @@ function getFormData(){
     fac_lines: [...fac_lines],
     savedAt: new Date().toISOString()
   };
-}
-
-function saveDocument(){
-  const data = getFormData();
-  const key = 'nh_doc_' + (data.num || Date.now());
-  try{ localStorage.setItem(key, JSON.stringify(data)); }catch(e){}
-  loadSavedList();
-  const btn = document.querySelector('.btn-secondary');
-  btn.textContent = '✅ Sauvegardé !';
-  setTimeout(()=>btn.textContent='💾 Sauvegarder', 2000);
-}
-
-function loadSavedList(){
-  const list = document.getElementById('saved-list');
-  if(!list) return;
-  const docs = [];
-  for(let i=0; i<localStorage.length; i++){
-    const k = localStorage.key(i);
-    if(k && k.startsWith('nh_doc_')){
-      try{ docs.push({key:k, ...JSON.parse(localStorage.getItem(k))}); }catch(e){}
-    }
-  }
-  docs.sort((a,b)=>b.savedAt?.localeCompare(a.savedAt||'')||0);
-  if(!docs.length){ list.innerHTML='<div style="font-size:12px;color:var(--tm);text-align:center;padding:8px">Aucun document sauvegardé</div>'; return; }
-  list.innerHTML = docs.map(d=>`
-    <div class="saved-item">
-      <div class="si-info">
-        <div class="si-num">${d.docType} N°${d.num||'?'}</div>
-        <div class="si-client">${d.cliNom||'—'} · ${d.projet||''}</div>
-      </div>
-      <div class="si-actions">
-        <button class="si-btn si-load" onclick="loadDocument('${d.key}')">Ouvrir</button>
-        <button class="si-btn si-del" onclick="deleteDocument('${d.key}')">×</button>
-      </div>
-    </div>`).join('');
-}
-
-function loadDocument(key){
-  try{
-    const d = JSON.parse(localStorage.getItem(key));
-    setType(d.docType||'FACTURE');
-    document.getElementById('doc-num').value = d.num||'';
-    document.getElementById('doc-date').value = d.date||'';
-    document.getElementById('doc-validity').value = d.validity||'';
-    document.getElementById('doc-projet').value = d.projet||'';
-    document.getElementById('doc-desc').value = d.desc||'';
-    document.getElementById('cli-nom').value = d.cliNom||'';
-    document.getElementById('cli-adr1').value = d.cliAdr1||'';
-    if(document.getElementById('cli-adr2')) document.getElementById('cli-adr2').value = d.cliAdr2||'';
-    document.getElementById('cli-cp').value = d.cliCp||'';
-    document.getElementById('cli-ville').value = d.cliVille||'';
-    document.getElementById('cli-email').value = d.cliEmail||'';
-    document.getElementById('doc-note').value = d.note||'';
-    document.getElementById('timbre-check').checked = d.timbreOn||false;
-    document.getElementById('timbre-val').value = d.timbreVal||78;
-    fac_lines = d.fac_lines||[];
-    renderLines(); render();
-  }catch(e){}
-}
-
-function deleteDocument(key){
-  if(!confirm('Supprimer ce document ?')) return;
-  localStorage.removeItem(key); loadSavedList();
 }
 
 function resetForm(){
@@ -2666,9 +2805,6 @@ window.toggleCustomSelect=toggleCustomSelect; window.initCustomSelect=initCustom
   window.addFromSelect = addFromSelect;
   window.removeLine = removeLine;
   window.downloadPDF = downloadPDF;
-  window.saveDocument = saveDocument;
-  window.loadDocument = loadDocument;
-  window.deleteDocument = deleteDocument;
   window.resetForm = resetForm;
   window.cloturerAnnee = cloturerAnnee;
   window.solderEmprunt = solderEmprunt;
@@ -2679,6 +2815,7 @@ window.toggleCustomSelect=toggleCustomSelect; window.initCustomSelect=initCustom
   window.ls = ls;
   window.savePmData = savePmData;
   window.validerSaisie = validerSaisie;
+  window.highlightInput = highlightInput;
 })();
 
 
