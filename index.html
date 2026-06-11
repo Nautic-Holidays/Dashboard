@@ -280,7 +280,32 @@ body{font-family:'Dosis',sans-serif;background:var(--bg);color:var(--tp);font-si
   <button class="nt" data-page="si" onclick="go('si')">Simulateur</button>
   <button class="nt" data-page="ob" onclick="go('ob')">Objectifs & projets</button>
   <button class="nt" data-page="pm" onclick="go('pm')">📊 Analyse Permis</button>
+  <button class="nt" style="margin-left:auto;background:var(--wh);border:1.5px solid var(--bd);color:var(--ts)" onclick="openGhSync()">☁️ Sync</button>
 </nav>
+
+<!-- MODAL GITHUB SYNC -->
+<div id="gh-modal" style="display:none;position:fixed;inset:0;background:rgba(10,42,63,.55);z-index:9999;align-items:center;justify-content:center">
+  <div style="background:#fff;border-radius:14px;padding:28px 32px;width:min(480px,92vw);box-shadow:0 8px 40px rgba(20,121,173,.18);font-family:'Dosis',sans-serif">
+    <div style="font-size:17px;font-weight:700;color:var(--tp);margin-bottom:6px">☁️ Synchronisation GitHub</div>
+    <div style="font-size:13px;color:var(--tm);margin-bottom:18px">Repo : <strong>Nautic-Holidays/Dashboard</strong> · Fichier : <strong>index.html</strong></div>
+
+    <label style="font-size:12px;font-weight:600;color:var(--ts);display:block;margin-bottom:4px">🔑 Personal Access Token GitHub</label>
+    <div style="display:flex;gap:8px;margin-bottom:6px">
+      <input type="password" id="gh-token-input" placeholder="ghp_..." style="flex:1;padding:8px 10px;border:1.5px solid var(--bd);border-radius:8px;font-family:'Dosis',sans-serif;font-size:13px">
+      <button onclick="ghToggleToken()" style="padding:8px 12px;border:1.5px solid var(--bd);border-radius:8px;background:var(--bg);font-size:12px;cursor:pointer;white-space:nowrap">👁 Voir</button>
+    </div>
+    <div style="font-size:11px;color:var(--tm);margin-bottom:18px">Stocké uniquement sur cet appareil (localStorage). Jamais envoyé ailleurs que GitHub.</div>
+
+    <div style="display:flex;gap:10px;margin-bottom:12px">
+      <button onclick="ghPush()" style="flex:1;padding:10px;background:var(--oc);color:#fff;border:none;border-radius:8px;font-family:'Dosis',sans-serif;font-size:14px;font-weight:600;cursor:pointer">⬆️ Envoyer vers GitHub</button>
+      <button onclick="ghPull()" style="flex:1;padding:10px;background:#fff;color:var(--oc);border:1.5px solid var(--oc);border-radius:8px;font-family:'Dosis',sans-serif;font-size:14px;font-weight:600;cursor:pointer">⬇️ Récupérer depuis GitHub</button>
+    </div>
+
+    <div id="gh-status" style="font-size:12px;color:var(--ts);min-height:18px;margin-bottom:14px"></div>
+
+    <button onclick="closeGhSync()" style="width:100%;padding:8px;background:var(--bg);border:1px solid var(--bd);border-radius:8px;font-family:'Dosis',sans-serif;font-size:13px;cursor:pointer;color:var(--ts)">Fermer</button>
+  </div>
+</div>
 <div class="main">
 
 <!-- VUE GLOBALE -->
@@ -2951,7 +2976,7 @@ function validerSaisie(){
     const inp=document.getElementById('inp_'+i);
     if(!inp||inp.value===''||inp.value===null)return null;
     const v=parseFloat(inp.value);
-    return isNaN(v)||v<=0?null:Math.round(v);
+    return isNaN(v)||v<=0?null:Math.round(v*100)/100;
   });
   D26.real=newReal;
   saveRealData();
@@ -3051,6 +3076,149 @@ setTimeout(()=>{buildSaisieGrid();}, 100);
   window.validerSaisie = validerSaisie;
   window.highlightInput = highlightInput;
   window.sim = sim;
+})();
+
+// ── GitHub Sync ───────────────────────────────────────────────────────────
+const GH_OWNER = 'Nautic-Holidays';
+const GH_REPO  = 'Dashboard';
+const GH_FILE  = 'index.html';
+const GH_API   = 'https://api.github.com/repos/'+GH_OWNER+'/'+GH_REPO+'/contents/'+GH_FILE;
+
+function openGhSync(){
+  const modal = document.getElementById('gh-modal');
+  modal.style.display = 'flex';
+  const saved = localStorage.getItem('nh_gh_token') || '';
+  document.getElementById('gh-token-input').value = saved;
+  document.getElementById('gh-status').textContent = '';
+}
+function closeGhSync(){
+  document.getElementById('gh-modal').style.display = 'none';
+}
+function ghToggleToken(){
+  const inp = document.getElementById('gh-token-input');
+  inp.type = inp.type === 'password' ? 'text' : 'password';
+}
+function ghSaveToken(){
+  const t = document.getElementById('gh-token-input').value.trim();
+  if(t) localStorage.setItem('nh_gh_token', t);
+  return t;
+}
+function ghStatus(msg, color){
+  const el = document.getElementById('gh-status');
+  if(el){ el.textContent = msg; el.style.color = color || 'var(--ts)'; }
+}
+
+// Collecter toutes les données localStorage du dashboard
+function ghCollectData(){
+  const keys = [];
+  for(let i=0; i<localStorage.length; i++){
+    const k = localStorage.key(i);
+    if(k && (k.startsWith('nh_') || k.startsWith('D26_') || k.startsWith('records_'))){
+      keys.push(k);
+    }
+  }
+  const data = {};
+  keys.forEach(k => { try{ data[k] = localStorage.getItem(k); }catch(e){} });
+  return data;
+}
+
+// Restaurer les données dans localStorage
+function ghRestoreData(data){
+  Object.keys(data).forEach(k => {
+    try{ localStorage.setItem(k, data[k]); }catch(e){}
+  });
+}
+
+async function ghPush(){
+  const token = ghSaveToken();
+  if(!token){ ghStatus('❌ Token manquant', '#E74C3C'); return; }
+  ghStatus('⏳ Envoi en cours...', 'var(--ts)');
+  try {
+    // 1. Récupérer le SHA du fichier actuel
+    const res = await fetch(GH_API, {
+      headers: { 'Authorization': 'token '+token, 'Accept': 'application/vnd.github.v3+json' }
+    });
+    if(!res.ok) throw new Error('Erreur GitHub '+res.status+' — vérifiez le token et les permissions');
+    const fileInfo = await res.json();
+    const sha = fileInfo.sha;
+
+    // 2. Lire le contenu HTML actuel (base64 → texte)
+    const currentB64 = fileInfo.content.replace(/\n/g,'');
+    const currentHtml = decodeURIComponent(escape(atob(currentB64)));
+
+    // 3. Injecter les données localStorage dans le HTML
+    const lsData = ghCollectData();
+    const marker = '/* __NH_SYNC_DATA__ */';
+    const dataScript = '<script id="nh-sync-data">/* __NH_SYNC_DATA__ */\nwindow.__NH_SYNC__='+JSON.stringify(lsData)+';\n<\/script>';
+    // Supprimer l'ancien bloc s'il existe
+    let newHtml = currentHtml.replace(/<script id="nh-sync-data">[\s\S]*?<\/script>/g, '');
+    // Injecter avant </body>
+    newHtml = newHtml.replace('</body>', dataScript+'\n</body>');
+
+    // 4. Pousser sur GitHub
+    const newB64 = btoa(unescape(encodeURIComponent(newHtml)));
+    const now = new Date().toLocaleString('fr-FR');
+    const pushRes = await fetch(GH_API, {
+      method: 'PUT',
+      headers: {
+        'Authorization': 'token '+token,
+        'Accept': 'application/vnd.github.v3+json',
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        message: 'Sync données dashboard — '+now,
+        content: newB64,
+        sha: sha
+      })
+    });
+    if(!pushRes.ok){
+      const err = await pushRes.json();
+      throw new Error(err.message || 'Erreur push '+pushRes.status);
+    }
+    ghStatus('✅ Données synchronisées sur GitHub ('+now+')', '#1f9fb7');
+  } catch(e) {
+    ghStatus('❌ '+e.message, '#E74C3C');
+  }
+}
+
+async function ghPull(){
+  const token = ghSaveToken();
+  if(!token){ ghStatus('❌ Token manquant', '#E74C3C'); return; }
+  ghStatus('⏳ Récupération en cours...', 'var(--ts)');
+  try {
+    const res = await fetch(GH_API, {
+      headers: { 'Authorization': 'token '+token, 'Accept': 'application/vnd.github.v3+json' }
+    });
+    if(!res.ok) throw new Error('Erreur GitHub '+res.status);
+    const fileInfo = await res.json();
+    const b64 = fileInfo.content.replace(/\n/g,'');
+    const html = decodeURIComponent(escape(atob(b64)));
+
+    // Extraire les données
+    const match = html.match(/window\.__NH_SYNC__=(\{[\s\S]*?\});\s*\n<\/script>/);
+    if(!match){ ghStatus('⚠️ Aucune donnée sync trouvée sur GitHub. Faites d\'abord un envoi.', '#F39C12'); return; }
+
+    const data = JSON.parse(match[1]);
+    ghRestoreData(data);
+
+    ghStatus('✅ Données récupérées depuis GitHub — rechargement...', '#1f9fb7');
+    setTimeout(() => location.reload(), 1500);
+  } catch(e) {
+    ghStatus('❌ '+e.message, '#E74C3C');
+  }
+}
+
+// Charger automatiquement les données sync si présentes dans le HTML
+(function(){
+  if(window.__NH_SYNC__){
+    const existing = localStorage.getItem('nh_real_'+new Date().getFullYear());
+    if(!existing){
+      // Pas de données locales → restaurer depuis le sync
+      Object.keys(window.__NH_SYNC__).forEach(k => {
+        try{ localStorage.setItem(k, window.__NH_SYNC__[k]); }catch(e){}
+      });
+    }
+  }
 })();
 
 
