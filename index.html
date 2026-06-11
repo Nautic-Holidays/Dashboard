@@ -3078,11 +3078,13 @@ setTimeout(()=>{buildSaisieGrid();}, 100);
   window.sim = sim;
 })();
 
-// ── GitHub Sync ───────────────────────────────────────────────────────────
+// ── GitHub Sync ─────────────────────────────────────────────────────────
+// Les données sont stockées dans data.json (pas dans index.html)
+// GitHub ne peut donc pas détecter de "secret dans le contenu"
 const GH_OWNER = 'Nautic-Holidays';
 const GH_REPO  = 'Dashboard';
-const GH_FILE  = 'index.html';
-const GH_API   = 'https://api.github.com/repos/'+GH_OWNER+'/'+GH_REPO+'/contents/'+GH_FILE;
+const GH_DATA  = 'data.json';  // fichier séparé pour les données
+const GH_API_DATA = 'https://api.github.com/repos/'+GH_OWNER+'/'+GH_REPO+'/contents/'+GH_DATA;
 
 function openGhSync(){
   const modal = document.getElementById('gh-modal');
@@ -3098,128 +3100,93 @@ function ghToggleToken(){
   const inp = document.getElementById('gh-token-input');
   inp.type = inp.type === 'password' ? 'text' : 'password';
 }
-function ghSaveToken(){
-  const t = document.getElementById('gh-token-input').value.trim();
-  if(t) localStorage.setItem('nh_gh_token', t);
-  return t;
-}
 function ghStatus(msg, color){
   const el = document.getElementById('gh-status');
   if(el){ el.textContent = msg; el.style.color = color || 'var(--ts)'; }
 }
 
-// Collecter toutes les données localStorage du dashboard
+// Collecter toutes les clés nh_* du localStorage
 function ghCollectData(){
-  const keys = [];
+  const data = {};
   for(let i=0; i<localStorage.length; i++){
     const k = localStorage.key(i);
-    if(k && (k.startsWith('nh_') || k.startsWith('D26_') || k.startsWith('records_'))){
-      keys.push(k);
+    if(k && k.startsWith('nh_') && k !== 'nh_gh_token'){
+      try{ data[k] = localStorage.getItem(k); }catch(e){}
     }
   }
-  const data = {};
-  keys.forEach(k => { try{ data[k] = localStorage.getItem(k); }catch(e){} });
   return data;
 }
 
-// Restaurer les données dans localStorage
-function ghRestoreData(data){
-  Object.keys(data).forEach(k => {
-    try{ localStorage.setItem(k, data[k]); }catch(e){}
-  });
-}
-
 async function ghPush(){
-  const token = ghSaveToken();
+  const token = document.getElementById('gh-token-input').value.trim();
   if(!token){ ghStatus('❌ Token manquant', '#E74C3C'); return; }
+  localStorage.setItem('nh_gh_token', token);
   ghStatus('⏳ Envoi en cours...', 'var(--ts)');
   try {
-    // 1. Récupérer le SHA du fichier actuel
-    const res = await fetch(GH_API, {
-      headers: { 'Authorization': 'token '+token, 'Accept': 'application/vnd.github.v3+json' }
+    // Vérifier si data.json existe déjà (pour récupérer son SHA)
+    let sha = null;
+    const check = await fetch(GH_API_DATA, {
+      headers: { 'Authorization': 'Bearer '+token, 'Accept': 'application/vnd.github.v3+json' }
     });
-    if(!res.ok) throw new Error('Erreur GitHub '+res.status+' — vérifiez le token et les permissions');
-    const fileInfo = await res.json();
-    const sha = fileInfo.sha;
+    if(check.ok){ const info = await check.json(); sha = info.sha; }
 
-    // 2. Lire le contenu HTML actuel (base64 → texte)
-    const currentB64 = fileInfo.content.replace(/\n/g,'');
-    const currentHtml = decodeURIComponent(escape(atob(currentB64)));
-
-    // 3. Injecter les données localStorage dans le HTML
-    const lsData = ghCollectData();
-    const marker = '/* __NH_SYNC_DATA__ */';
-    const dataScript = '<script id="nh-sync-data">/* __NH_SYNC_DATA__ */\nwindow.__NH_SYNC__='+JSON.stringify(lsData)+';\n<\/script>';
-    // Supprimer l'ancien bloc s'il existe
-    let newHtml = currentHtml.replace(/<script id="nh-sync-data">[\s\S]*?<\/script>/g, '');
-    // Injecter avant </body>
-    newHtml = newHtml.replace('</body>', dataScript+'\n</body>');
-
-    // 4. Pousser sur GitHub
-    const newB64 = btoa(unescape(encodeURIComponent(newHtml)));
+    // Préparer le contenu JSON (pas de token dedans)
+    const payload = {
+      timestamp: new Date().toISOString(),
+      device: navigator.userAgent.split(')')[0].split('(')[1] || 'inconnu',
+      data: ghCollectData()
+    };
+    const content = btoa(unescape(encodeURIComponent(JSON.stringify(payload, null, 2))));
     const now = new Date().toLocaleString('fr-FR');
-    const pushRes = await fetch(GH_API, {
+    const body = { message: 'Sync NH '+now, content };
+    if(sha) body.sha = sha;
+
+    const res = await fetch(GH_API_DATA, {
       method: 'PUT',
       headers: {
-        'Authorization': 'token '+token,
+        'Authorization': 'Bearer '+token,
         'Accept': 'application/vnd.github.v3+json',
         'Content-Type': 'application/json'
       },
-      body: JSON.stringify({
-        message: 'Sync données dashboard — '+now,
-        content: newB64,
-        sha: sha
-      })
+      body: JSON.stringify(body)
     });
-    if(!pushRes.ok){
-      const err = await pushRes.json();
-      throw new Error(err.message || 'Erreur push '+pushRes.status);
+    if(!res.ok){
+      const err = await res.json();
+      throw new Error(err.message || 'Erreur '+res.status);
     }
-    ghStatus('✅ Données synchronisées sur GitHub ('+now+')', '#1f9fb7');
+    ghStatus('✅ Synchronisé sur GitHub — '+now, '#1f9fb7');
   } catch(e) {
     ghStatus('❌ '+e.message, '#E74C3C');
   }
 }
 
 async function ghPull(){
-  const token = ghSaveToken();
+  const token = document.getElementById('gh-token-input').value.trim();
   if(!token){ ghStatus('❌ Token manquant', '#E74C3C'); return; }
+  localStorage.setItem('nh_gh_token', token);
   ghStatus('⏳ Récupération en cours...', 'var(--ts)');
   try {
-    const res = await fetch(GH_API, {
-      headers: { 'Authorization': 'token '+token, 'Accept': 'application/vnd.github.v3+json' }
+    const res = await fetch(GH_API_DATA, {
+      headers: { 'Authorization': 'Bearer '+token, 'Accept': 'application/vnd.github.v3+json' }
     });
-    if(!res.ok) throw new Error('Erreur GitHub '+res.status);
-    const fileInfo = await res.json();
-    const b64 = fileInfo.content.replace(/\n/g,'');
-    const html = decodeURIComponent(escape(atob(b64)));
+    if(!res.ok){
+      if(res.status === 404) throw new Error("Aucune donnée trouvée. Faites un envoi depuis votre PC d'abord.");
+      throw new Error('Erreur GitHub '+res.status);
+    }
+    const info = await res.json();
+    const json = JSON.parse(decodeURIComponent(escape(atob(info.content.replace(/\n/g,'')))));
+    const savedAt = new Date(json.timestamp).toLocaleString('fr-FR');
 
-    // Extraire les données
-    const match = html.match(/window\.__NH_SYNC__=(\{[\s\S]*?\});\s*\n<\/script>/);
-    if(!match){ ghStatus('⚠️ Aucune donnée sync trouvée sur GitHub. Faites d\'abord un envoi.', '#F39C12'); return; }
+    Object.keys(json.data).forEach(k => {
+      try{ localStorage.setItem(k, json.data[k]); }catch(e){}
+    });
 
-    const data = JSON.parse(match[1]);
-    ghRestoreData(data);
-
-    ghStatus('✅ Données récupérées depuis GitHub — rechargement...', '#1f9fb7');
-    setTimeout(() => location.reload(), 1500);
+    ghStatus('✅ Données du '+savedAt+' restaurées — rechargement...', '#1f9fb7');
+    setTimeout(() => { closeGhSync(); location.reload(); }, 1800);
   } catch(e) {
     ghStatus('❌ '+e.message, '#E74C3C');
   }
 }
-
-// Charger automatiquement les données sync si présentes dans le HTML
-(function(){
-  if(window.__NH_SYNC__){
-    const existing = localStorage.getItem('nh_real_'+new Date().getFullYear());
-    if(!existing){
-      // Pas de données locales → restaurer depuis le sync
-      Object.keys(window.__NH_SYNC__).forEach(k => {
-        try{ localStorage.setItem(k, window.__NH_SYNC__[k]); }catch(e){}
-      });
-    }
-  }
-})();
 
 
 
