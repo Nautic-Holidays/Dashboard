@@ -760,11 +760,12 @@ body{font-family:'Dosis',sans-serif;background:var(--bg);color:var(--tp);font-si
 <div class="sg">
 <div class="sw">
   <div class="sc"><label>CA TTC <span class="vd" id="d0">169 550 €</span></label><input type="range" id="r0" min="80000" max="300000" step="1000" value="169550" oninput="sim()"></div>
-  <div class="sc"><label>Charges externes hors loyer SCI <span class="vd" id="d1">75 331 €</span></label><input type="range" id="r1" min="20000" max="130000" step="500" value="75331" oninput="sim()"></div>
+  <div class="sc"><label>Charges ext. (formateur, entretien, assurances, carburant, fournitures…) <span class="vd" id="d1">63 331 €</span></label><input type="range" id="r1" min="20000" max="130000" step="500" value="63331" oninput="sim()"></div>
+  <div class="sc"><label>Communication &amp; marketing <span class="vd" id="d9">12 000 €</span></label><input type="range" id="r9" min="0" max="40000" step="500" value="12000" oninput="sim()"></div>
   <div class="sc"><label>Loyer SCI NHPB <span class="vd" id="d2">25 040 €</span></label><input type="range" id="r2" min="0" max="36000" step="520" value="25040" oninput="sim()"></div>
   <div class="sc"><label>Rémunération dirigeant <span class="vd" id="d3">18 000 €</span></label><input type="range" id="r3" min="0" max="60000" step="1000" value="18000" oninput="sim()"></div>
   <div class="sc"><label>Cotisations sociales <span class="vd" id="d4">11 400 €</span></label><input type="range" id="r4" min="3000" max="30000" step="300" value="11400" oninput="sim()"></div>
-  <div class="sc"><label>Impôts & taxes <span class="vd" id="d5">4 576 €</span></label><input type="range" id="r5" min="1000" max="12000" step="100" value="4576" oninput="sim()"></div>
+  <div class="sc"><label>Impôts &amp; taxes <span class="vd" id="d5">4 576 €</span></label><input type="range" id="r5" min="1000" max="12000" step="100" value="4576" oninput="sim()"></div>
   <div class="sc"><label>Amortissements <span class="vd" id="d6">8 512 €</span></label><input type="range" id="r6" min="3000" max="15000" step="100" value="8512" oninput="sim()"></div>
   <div class="sc"><label>Charges financières <span class="vd" id="d7">3 000 €</span></label><input type="range" id="r7" min="500" max="8000" step="100" value="3000" oninput="sim()"></div>
   <div class="sc"><label>Revenus récurrents (app, loc…) <span class="vd" id="d8">0 €</span></label><input type="range" id="r8" min="0" max="50000" step="500" value="0" oninput="sim()"></div>
@@ -776,6 +777,7 @@ body{font-family:'Dosis',sans-serif;background:var(--bg);color:var(--tp);font-si
     <div class="sr"><span class="slb">Revenus récurrents</span><span class="svl" id="b1">—</span></div>
     <div class="sr"><span class="slb">Total produits</span><span class="svl" id="b2">—</span></div>
     <div class="sr"><span class="slb">Charges externes</span><span class="svl neg" id="b3">—</span></div>
+    <div class="sr"><span class="slb">Communication</span><span class="svl neg" id="b9">—</span></div>
     <div class="sr"><span class="slb">Loyer SCI</span><span class="svl" id="b4">—</span></div>
     <div class="sr"><span class="slb">Rémun. + cotisations</span><span class="svl" id="b5">—</span></div>
     <div class="sr"><span class="slb">Impôts & taxes</span><span class="svl" id="b6">—</span></div>
@@ -846,15 +848,11 @@ body{font-family:'Dosis',sans-serif;background:var(--bg);color:var(--tp);font-si
 
 <!-- ANALYSE PERMIS 2025 -->
 <div class="pg" id="p-pm">
-<div class="kg">
-  <div class="kc kao"><div class="kl">CA réel total 2025</div><div class="kv">152 367 €</div><div class="ks">TPE PayPal + WooCommerce + virements</div><span class="kd pos">+86% vs 2024</span></div>
-  <div class="kc kag"><div class="kl">Produit star</div><div class="kv">Côtier ECO</div><div class="ks">360 € · + Code 30 € = 390 €/dossier</div><span class="kd pos">~75% du CA estimé</span></div>
-  <div class="kc kaa"><div class="kl">Haute saison</div><div class="kv">Juil – Août</div><div class="ks">~43 700 € prévu 2026 (26% CA)</div><span class="kd wn">Période critique</span></div>
-  <div class="kc kac"><div class="kl">Seuil mensuel</div><div class="kv">~11 667 €</div><div class="ks">CA min pour couvrir les charges</div><span class="kd neg">5 mois sous seuil</span></div>
-</div>
+<div class="kg" id="pm-top-kpis"></div>
 
 <div id="pm-volumes-box"></div>
 <div id="pm-marge-box"></div>
+<div id="pm-monthly-box"></div>
 <div class="al info"><span>ℹ</span><div>Les données de saisie sont sauvegardées localement. <strong>Cliquer "✏️ Saisir les données annuelles"</strong> pour mettre à jour avec tes vrais chiffres après chaque exercice.</div></div>
 <div style="margin-bottom:14px">
   <button onclick="togglePmEdit()" id="pm-edit-btn" style="background:var(--oc);color:#fff;border:none;padding:8px 18px;border-radius:var(--rs);font-family:'Dosis',sans-serif;font-size:13px;font-weight:600;cursor:pointer">✏️ Saisir les données annuelles</button>
@@ -867,17 +865,96 @@ body{font-family:'Dosis',sans-serif;background:var(--bg);color:var(--tp);font-si
     <div><label style="font-size:12px;font-weight:500;color:var(--ts);display:block;margin-bottom:3px">CA total réel (€)</label>
     <input type="number" id="pm-ca" value="152367" style="width:100%;padding:6px 9px;border:1px solid var(--bd);border-radius:6px;font-family:'Dosis',sans-serif;font-size:13px"></div>
     <div><label style="font-size:12px;font-weight:500;color:var(--ts);display:block;margin-bottom:3px">Nb permis côtiers vendus</label>
-    <input type="number" id="pm-cotier" value="240" style="width:100%;padding:6px 9px;border:1px solid var(--bd);border-radius:6px;font-family:'Dosis',sans-serif;font-size:13px"></div>
+    <input type="number" id="pm-cotier" value="326" style="width:100%;padding:6px 9px;border:1px solid var(--bd);border-radius:6px;font-family:'Dosis',sans-serif;font-size:13px"></div>
     <div><label style="font-size:12px;font-weight:500;color:var(--ts);display:block;margin-bottom:3px">Nb fluviaux</label>
-    <input type="number" id="pm-fluvial" value="45" style="width:100%;padding:6px 9px;border:1px solid var(--bd);border-radius:6px;font-family:'Dosis',sans-serif;font-size:13px"></div>
+    <input type="number" id="pm-fluvial" value="19" style="width:100%;padding:6px 9px;border:1px solid var(--bd);border-radius:6px;font-family:'Dosis',sans-serif;font-size:13px"></div>
     <div><label style="font-size:12px;font-weight:500;color:var(--ts);display:block;margin-bottom:3px">Nb hauturiers</label>
-    <input type="number" id="pm-hauturier" value="24" style="width:100%;padding:6px 9px;border:1px solid var(--bd);border-radius:6px;font-family:'Dosis',sans-serif;font-size:13px"></div>
+    <input type="number" id="pm-hauturier" value="15" style="width:100%;padding:6px 9px;border:1px solid var(--bd);border-radius:6px;font-family:'Dosis',sans-serif;font-size:13px"></div>
     <div><label style="font-size:12px;font-weight:500;color:var(--ts);display:block;margin-bottom:3px">Nb CRR radio</label>
-    <input type="number" id="pm-crr" value="36" style="width:100%;padding:6px 9px;border:1px solid var(--bd);border-radius:6px;font-family:'Dosis',sans-serif;font-size:13px"></div>
+    <input type="number" id="pm-crr" value="16" style="width:100%;padding:6px 9px;border:1px solid var(--bd);border-radius:6px;font-family:'Dosis',sans-serif;font-size:13px"></div>
+    <div><label style="font-size:12px;font-weight:500;color:var(--ts);display:block;margin-bottom:3px">Nb inscriptions Code (25€)</label>
+    <input type="number" id="pm-code" value="356" style="width:100%;padding:6px 9px;border:1px solid var(--bd);border-radius:6px;font-family:'Dosis',sans-serif;font-size:13px"></div>
+    <div><label style="font-size:12px;font-weight:500;color:var(--ts);display:block;margin-bottom:3px">Nb Code supplémentaire (183€)</label>
+    <input type="number" id="pm-code-supp" value="10" style="width:100%;padding:6px 9px;border:1px solid var(--bd);border-radius:6px;font-family:'Dosis',sans-serif;font-size:13px"></div>
+    <div><label style="font-size:12px;font-weight:500;color:var(--ts);display:block;margin-bottom:3px">Perf vendues 1h</label>
+    <input type="number" id="pm-perf1" value="13" style="width:100%;padding:6px 9px;border:1px solid var(--bd);border-radius:6px;font-family:'Dosis',sans-serif;font-size:13px"></div>
+    <div><label style="font-size:12px;font-weight:500;color:var(--ts);display:block;margin-bottom:3px">Perf vendues 3h</label>
+    <input type="number" id="pm-perf3" value="2" style="width:100%;padding:6px 9px;border:1px solid var(--bd);border-radius:6px;font-family:'Dosis',sans-serif;font-size:13px"></div>
+    <div><label style="font-size:12px;font-weight:500;color:var(--ts);display:block;margin-bottom:3px">Perf vendues 5h</label>
+    <input type="number" id="pm-perf5" value="0" style="width:100%;padding:6px 9px;border:1px solid var(--bd);border-radius:6px;font-family:'Dosis',sans-serif;font-size:13px"></div>
   </div>
-  <div style="display:flex;gap:8px">
-    <button onclick="savePmData()" style="background:var(--g);color:#fff;border:none;padding:7px 16px;border-radius:var(--rs);font-family:'Dosis',sans-serif;font-size:13px;font-weight:600;cursor:pointer">✅ Enregistrer</button>
+  <div style="display:flex;gap:8px;margin-bottom:14px">
+    <button onclick="savePmData()" style="background:var(--g);color:#fff;border:none;padding:7px 16px;border-radius:var(--rs);font-family:'Dosis',sans-serif;font-size:13px;font-weight:600;cursor:pointer">✅ Enregistrer les volumes</button>
     <button onclick="togglePmEdit()" style="background:var(--bg);color:var(--ts);border:1px solid var(--bd);padding:7px 14px;border-radius:var(--rs);font-family:'Dosis',sans-serif;font-size:13px;cursor:pointer">Annuler</button>
+  </div>
+  <div style="border-top:1px dashed var(--bd);padding-top:12px">
+    <button onclick="toggleChargesDetail()" id="charges-detail-btn" style="background:none;border:none;color:var(--oc);font-family:'Dosis',sans-serif;font-size:12px;font-weight:600;cursor:pointer;padding:0;display:flex;align-items:center;gap:5px">
+      <span id="charges-detail-icon">▶</span> Détail des charges utilisées pour le calcul de marge (avancé)
+    </button>
+    <div id="charges-detail-section" style="display:none;margin-top:12px">
+      <div style="font-size:11px;color:var(--tm);margin-bottom:10px">Ces valeurs alimentent le calcul de marge par produit ci-dessous. Pré-remplies avec le CR SOGECA 2025 certifié — à ne modifier que si vous avez des chiffres plus récents.</div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:12px">
+        <div><label style="font-size:12px;font-weight:500;color:var(--ts);display:block;margin-bottom:3px">Loyer locaux/mois</label>
+        <input type="number" id="pm-loyer" value="2087" style="width:100%;padding:6px 9px;border:1px solid var(--bd);border-radius:6px;font-family:'Dosis',sans-serif;font-size:13px"></div>
+        <div><label style="font-size:12px;font-weight:500;color:var(--ts);display:block;margin-bottom:3px">Crédit-bail bateau/mois</label>
+        <input type="number" id="pm-loyer-bat" value="466" style="width:100%;padding:6px 9px;border:1px solid var(--bd);border-radius:6px;font-family:'Dosis',sans-serif;font-size:13px"></div>
+        <div><label style="font-size:12px;font-weight:500;color:var(--ts);display:block;margin-bottom:3px">Place au port/an</label>
+        <input type="number" id="pm-place-port" value="3378" style="width:100%;padding:6px 9px;border:1px solid var(--bd);border-radius:6px;font-family:'Dosis',sans-serif;font-size:13px"></div>
+        <div><label style="font-size:12px;font-weight:500;color:var(--ts);display:block;margin-bottom:3px">Location voiture/mois</label>
+        <input type="number" id="pm-voiture" value="393" style="width:100%;padding:6px 9px;border:1px solid var(--bd);border-radius:6px;font-family:'Dosis',sans-serif;font-size:13px"></div>
+        <div><label style="font-size:12px;font-weight:500;color:var(--ts);display:block;margin-bottom:3px">Locations diverses/an</label>
+        <input type="number" id="pm-loc-divers" value="1794" style="width:100%;padding:6px 9px;border:1px solid var(--bd);border-radius:6px;font-family:'Dosis',sans-serif;font-size:13px"></div>
+        <div><label style="font-size:12px;font-weight:500;color:var(--ts);display:block;margin-bottom:3px">Mutuelle/mois</label>
+        <input type="number" id="pm-mutuelle" value="240" style="width:100%;padding:6px 9px;border:1px solid var(--bd);border-radius:6px;font-family:'Dosis',sans-serif;font-size:13px"></div>
+        <div><label style="font-size:12px;font-weight:500;color:var(--ts);display:block;margin-bottom:3px">Assurances/mois</label>
+        <input type="number" id="pm-assurance" value="256" style="width:100%;padding:6px 9px;border:1px solid var(--bd);border-radius:6px;font-family:'Dosis',sans-serif;font-size:13px"></div>
+        <div><label style="font-size:12px;font-weight:500;color:var(--ts);display:block;margin-bottom:3px">Abo cours salle/mois</label>
+        <input type="number" id="pm-abocours" value="120" style="width:100%;padding:6px 9px;border:1px solid var(--bd);border-radius:6px;font-family:'Dosis',sans-serif;font-size:13px"></div>
+        <div><label style="font-size:12px;font-weight:500;color:var(--ts);display:block;margin-bottom:3px">Téléphone/internet/mois</label>
+        <input type="number" id="pm-telephone" value="80" style="width:100%;padding:6px 9px;border:1px solid var(--bd);border-radius:6px;font-family:'Dosis',sans-serif;font-size:13px"></div>
+        <div><label style="font-size:12px;font-weight:500;color:var(--ts);display:block;margin-bottom:3px">Électricité/an</label>
+        <input type="number" id="pm-electricite" value="417" style="width:100%;padding:6px 9px;border:1px solid var(--bd);border-radius:6px;font-family:'Dosis',sans-serif;font-size:13px"></div>
+        <div><label style="font-size:12px;font-weight:500;color:var(--ts);display:block;margin-bottom:3px">Carburant voiture/an</label>
+        <input type="number" id="pm-carburant-voiture" value="1916" style="width:100%;padding:6px 9px;border:1px solid var(--bd);border-radius:6px;font-family:'Dosis',sans-serif;font-size:13px"></div>
+        <div><label style="font-size:12px;font-weight:500;color:var(--ts);display:block;margin-bottom:3px">Petit équipement/an</label>
+        <input type="number" id="pm-petit-equip" value="1116" style="width:100%;padding:6px 9px;border:1px solid var(--bd);border-radius:6px;font-family:'Dosis',sans-serif;font-size:13px"></div>
+        <div><label style="font-size:12px;font-weight:500;color:var(--ts);display:block;margin-bottom:3px">Fournitures admin/an</label>
+        <input type="number" id="pm-fournitures-admin" value="843" style="width:100%;padding:6px 9px;border:1px solid var(--bd);border-radius:6px;font-family:'Dosis',sans-serif;font-size:13px"></div>
+        <div><label style="font-size:12px;font-weight:500;color:var(--ts);display:block;margin-bottom:3px">Fournitures permis/an</label>
+        <input type="number" id="pm-fournitures-permis" value="4199" style="width:100%;padding:6px 9px;border:1px solid var(--bd);border-radius:6px;font-family:'Dosis',sans-serif;font-size:13px"></div>
+        <div><label style="font-size:12px;font-weight:500;color:var(--ts);display:block;margin-bottom:3px">Fournitures bureau/an</label>
+        <input type="number" id="pm-fournitures" value="500" style="width:100%;padding:6px 9px;border:1px solid var(--bd);border-radius:6px;font-family:'Dosis',sans-serif;font-size:13px"></div>
+        <div><label style="font-size:12px;font-weight:500;color:var(--ts);display:block;margin-bottom:3px">Formateur pratique 604000/an</label>
+        <input type="number" id="pm-formateur604" value="12617" style="width:100%;padding:6px 9px;border:1px solid var(--bd);border-radius:6px;font-family:'Dosis',sans-serif;font-size:13px"></div>
+        <div><label style="font-size:12px;font-weight:500;color:var(--ts);display:block;margin-bottom:3px">Annonces/insertions/an</label>
+        <input type="number" id="pm-annonces" value="4007" style="width:100%;padding:6px 9px;border:1px solid var(--bd);border-radius:6px;font-family:'Dosis',sans-serif;font-size:13px"></div>
+        <div><label style="font-size:12px;font-weight:500;color:var(--ts);display:block;margin-bottom:3px">Communication/an</label>
+        <input type="number" id="pm-communication" value="12000" style="width:100%;padding:6px 9px;border:1px solid var(--bd);border-radius:6px;font-family:'Dosis',sans-serif;font-size:13px"></div>
+        <div><label style="font-size:12px;font-weight:500;color:var(--ts);display:block;margin-bottom:3px">Divers (623800)/an</label>
+        <input type="number" id="pm-divers" value="6288" style="width:100%;padding:6px 9px;border:1px solid var(--bd);border-radius:6px;font-family:'Dosis',sans-serif;font-size:13px"></div>
+        <div><label style="font-size:12px;font-weight:500;color:var(--ts);display:block;margin-bottom:3px">Transports (624100)/an</label>
+        <input type="number" id="pm-transports" value="77" style="width:100%;padding:6px 9px;border:1px solid var(--bd);border-radius:6px;font-family:'Dosis',sans-serif;font-size:13px"></div>
+        <div><label style="font-size:12px;font-weight:500;color:var(--ts);display:block;margin-bottom:3px">Entretien bateau/an</label>
+        <input type="number" id="pm-entretien" value="5721" style="width:100%;padding:6px 9px;border:1px solid var(--bd);border-radius:6px;font-family:'Dosis',sans-serif;font-size:13px"></div>
+        <div><label style="font-size:12px;font-weight:500;color:var(--ts);display:block;margin-bottom:3px">Entretien transport/an</label>
+        <input type="number" id="pm-entretien-transport" value="378" style="width:100%;padding:6px 9px;border:1px solid var(--bd);border-radius:6px;font-family:'Dosis',sans-serif;font-size:13px"></div>
+        <div><label style="font-size:12px;font-weight:500;color:var(--ts);display:block;margin-bottom:3px">Entretien bureau/an</label>
+        <input type="number" id="pm-entretien-bureau" value="99" style="width:100%;padding:6px 9px;border:1px solid var(--bd);border-radius:6px;font-family:'Dosis',sans-serif;font-size:13px"></div>
+        <div><label style="font-size:12px;font-weight:500;color:var(--ts);display:block;margin-bottom:3px">Maintenance/an</label>
+        <input type="number" id="pm-maintenance" value="215" style="width:100%;padding:6px 9px;border:1px solid var(--bd);border-radius:6px;font-family:'Dosis',sans-serif;font-size:13px"></div>
+        <div><label style="font-size:12px;font-weight:500;color:var(--ts);display:block;margin-bottom:3px">Honoraires comptable/an</label>
+        <input type="number" id="pm-comptable" value="3074" style="width:100%;padding:6px 9px;border:1px solid var(--bd);border-radius:6px;font-family:'Dosis',sans-serif;font-size:13px"></div>
+        <div><label style="font-size:12px;font-weight:500;color:var(--ts);display:block;margin-bottom:3px">Honoraires divers/an</label>
+        <input type="number" id="pm-remun-divers" value="1462" style="width:100%;padding:6px 9px;border:1px solid var(--bd);border-radius:6px;font-family:'Dosis',sans-serif;font-size:13px"></div>
+        <div><label style="font-size:12px;font-weight:500;color:var(--ts);display:block;margin-bottom:3px">Salaire gérant net/mois</label>
+        <input type="number" id="pm-salaire" value="900" style="width:100%;padding:6px 9px;border:1px solid var(--bd);border-radius:6px;font-family:'Dosis',sans-serif;font-size:13px"></div>
+        <div><label style="font-size:12px;font-weight:500;color:var(--ts);display:block;margin-bottom:3px">Charges sociales gérant/mois</label>
+        <input type="number" id="pm-charges-soc" value="571" style="width:100%;padding:6px 9px;border:1px solid var(--bd);border-radius:6px;font-family:'Dosis',sans-serif;font-size:13px"></div>
+        <div><label style="font-size:12px;font-weight:500;color:var(--ts);display:block;margin-bottom:3px">Budget essence bateau/an</label>
+        <input type="number" id="pm-essence" value="1500" style="width:100%;padding:6px 9px;border:1px solid var(--bd);border-radius:6px;font-family:'Dosis',sans-serif;font-size:13px"></div>
+      </div>
+      <button onclick="savePmData()" style="background:var(--g);color:#fff;border:none;padding:7px 16px;border-radius:var(--rs);font-family:'Dosis',sans-serif;font-size:13px;font-weight:600;cursor:pointer">✅ Enregistrer les charges</button>
+    </div>
   </div>
 </div>
 
@@ -2177,8 +2254,10 @@ function sim(){
   if(!_el(0)) return; // simulateur pas encore rendu
   const v=i=>+_el(i).value;
   const ca=v(0),e=v(1),l=v(2),s=v(3),c=v(4),t=v(5),m=v(6),f=v(7),r=v(8);
-  for(let i=0;i<9;i++) document.getElementById('d'+i).textContent=[ca,e,l,s,c,t,m,f,r][i].toLocaleString('fr-FR')+' €';
-  const prod=ca+r,ebe=prod-e-l-s-c-t,res=ebe-m-f,tot=e+l+s+c+t+m+f;
+  const comm=document.getElementById('r9')?+document.getElementById('r9').value:12000;
+  [ca,e,l,s,c,t,m,f,r].forEach((val,i)=>document.getElementById('d'+i).textContent=val.toLocaleString('fr-FR')+' €');
+  if(document.getElementById('d9')) document.getElementById('d9').textContent=comm.toLocaleString('fr-FR')+' €';
+  const prod=ca+r,ebe=prod-e-comm-l-s-c-t,res=ebe-m-f,tot=e+comm+l+s+c+t+m+f;
   const mn=ca>0?Math.round(res/ca*100):0,rc=prod>0?Math.round(tot/prod*100):0;
   const el=document.getElementById('srv');
   el.textContent=(res>=0?'+':'')+Math.round(res).toLocaleString('fr-FR')+' €';
@@ -2187,6 +2266,7 @@ function sim(){
   document.getElementById('b1').textContent=r>0?'+'+r.toLocaleString('fr-FR')+' €':'0 €';
   document.getElementById('b2').textContent='+'+prod.toLocaleString('fr-FR')+' €';
   document.getElementById('b3').textContent='−'+e.toLocaleString('fr-FR')+' €';
+  if(document.getElementById('b9')) document.getElementById('b9').textContent='−'+comm.toLocaleString('fr-FR')+' €';
   document.getElementById('b4').textContent='−'+l.toLocaleString('fr-FR')+' €';
   document.getElementById('b5').textContent='−'+(s+c).toLocaleString('fr-FR')+' €';
   document.getElementById('b6').textContent='−'+t.toLocaleString('fr-FR')+' €';
@@ -2208,7 +2288,7 @@ function sim(){
 
 function getPmData(){
   try{const s=localStorage.getItem('nh_permis');if(s)return JSON.parse(s);}catch(e){}
-  return {yr:2025,ca:152367,cotier:240,fluvial:45,hauturier:24,crr:36,code:80,perf1:20,perf3:7,perf5:3,loyer:2087,loyerBat:466,placePort:3378,voiture:393,locDivers:1794,entretienBateau:5721,entretienTransport:378,entretienBureau:99,maintenance:215,assurance:256,carburantVoiture:1916,petitEquip:1116,fournituresAdmin:843,fournituresPermis:4199,electricite:417,fournitures:500,formateur604:12617,salaire:900,chargesSoc:571,remunDivers:1462,mutuelle:240,aboCours:120,telephone:80,communication:12000,annonces:4007,divers:6288,transports:77,comptable:3074,amortissements:8512,chargesFinancieres:3695,autres:0,essence:1500,formateur:0};
+  return {yr:2025,ca:152367,cotier:326,fluvial:19,hauturier:15,crr:16,code:356,codeSupp:10,perf1:13,perf3:2,perf5:0,mixEco:82.2,mixStd:11.1,mixPres:6.7,loyer:2087,loyerBat:466,placePort:3378,voiture:393,locDivers:1794,entretienBateau:5721,entretienTransport:378,entretienBureau:99,maintenance:215,assurance:256,carburantVoiture:1916,petitEquip:1116,fournituresAdmin:843,fournituresPermis:4199,electricite:417,fournitures:500,formateur604:12617,salaire:900,chargesSoc:571,remunDivers:1462,mutuelle:240,aboCours:120,telephone:80,communication:12000,annonces:4007,divers:6288,transports:77,comptable:3074,amortissements:8512,chargesFinancieres:3695,autres:0,essence:1500,formateur:0};
 }
 function savePmData(){
   const d={
@@ -2219,12 +2299,12 @@ function savePmData(){
     hauturier:parseInt(document.getElementById('pm-hauturier').value)||0,
     crr:parseInt(document.getElementById('pm-crr').value)||0,
     code:parseInt(document.getElementById('pm-code').value)||0,
+    codeSupp:parseInt(g('pm-code-supp',10)),
     perf1:parseInt(document.getElementById('pm-perf1')?document.getElementById('pm-perf1').value:20)||0,
     perf3:parseInt(document.getElementById('pm-perf3')?document.getElementById('pm-perf3').value:7)||0,
     perf5:parseInt(document.getElementById('pm-perf5')?document.getElementById('pm-perf5').value:3)||0,
     loyer:parseInt(document.getElementById('pm-loyer').value)||0,
     loyerBat:parseInt(document.getElementById('pm-loyer-bat').value)||0,
-    placePort:parseInt(document.getElementById('pm-place-port')?document.getElementById('pm-place-port').value:4400)||4400,
     voiture:parseInt(document.getElementById('pm-voiture').value)||0,
     mutuelle:parseInt(document.getElementById('pm-mutuelle').value)||0,
     assurance:parseInt(document.getElementById('pm-assurance').value)||0,
@@ -2233,17 +2313,42 @@ function savePmData(){
     fournitures:parseInt(document.getElementById('pm-fournitures')?document.getElementById('pm-fournitures').value:500)||500,
     communication:parseInt(document.getElementById('pm-communication').value)||0,
     entretienBateau:parseInt(document.getElementById('pm-entretien').value)||0,
-    comptable:parseInt(document.getElementById('pm-comptable')?document.getElementById('pm-comptable').value:3800)||3800,
-    salaire:parseInt(document.getElementById('pm-salaire')?document.getElementById('pm-salaire').value:1500)||0,
-    chargesSoc:parseInt(document.getElementById('pm-charges-soc')?document.getElementById('pm-charges-soc').value:600)||0,
-    autres:parseInt(document.getElementById('pm-autres').value)||0,
+    comptable:parseInt(document.getElementById('pm-comptable')?document.getElementById('pm-comptable').value:3074)||3074,
+    salaire:parseInt(document.getElementById('pm-salaire')?document.getElementById('pm-salaire').value:900)||0,
+    chargesSoc:parseInt(document.getElementById('pm-charges-soc')?document.getElementById('pm-charges-soc').value:571)||0,
+    autres:0,
     essence:parseInt(document.getElementById('pm-essence').value)||1500,
     formateur604:parseInt(document.getElementById('pm-formateur604')?document.getElementById('pm-formateur604').value:12617)||12617,
-    formateur:0
+    formateur:0,
+    placePort:parseInt(g('pm-place-port',3378)),
+    locDivers:parseInt(g('pm-loc-divers',1794)),
+    electricite:parseInt(g('pm-electricite',417)),
+    carburantVoiture:parseInt(g('pm-carburant-voiture',1916)),
+    petitEquip:parseInt(g('pm-petit-equip',1116)),
+    fournituresAdmin:parseInt(g('pm-fournitures-admin',843)),
+    fournituresPermis:parseInt(g('pm-fournitures-permis',4199)),
+    annonces:parseInt(g('pm-annonces',4007)),
+    divers:parseInt(g('pm-divers',6288)),
+    transports:parseInt(g('pm-transports',77)),
+    entretienTransport:parseInt(g('pm-entretien-transport',378)),
+    entretienBureau:parseInt(g('pm-entretien-bureau',99)),
+    maintenance:parseInt(g('pm-maintenance',215)),
+    remunDivers:parseInt(g('pm-remun-divers',1462)),
+    amortissements:8512,
+    chargesFinancieres:3695
   };
   try{localStorage.setItem('nh_permis',JSON.stringify(d));}catch(e){}
   togglePmEdit();
   rPm();
+}
+function g(id,def){ const el=document.getElementById(id); return el?el.value:def; }
+function toggleChargesDetail(){
+  const sec=document.getElementById('charges-detail-section');
+  const icon=document.getElementById('charges-detail-icon');
+  if(!sec) return;
+  const open=sec.style.display!=='none';
+  sec.style.display=open?'none':'block';
+  if(icon) icon.textContent=open?'▶':'▼';
 }
 function togglePmEdit(){
   const f=document.getElementById('pm-edit-form');
@@ -2254,30 +2359,63 @@ function togglePmEdit(){
   if(b)b.textContent=visible?'✏️ Saisir les données annuelles':'✕ Fermer';
   if(!visible){
     const d=getPmData();
-    document.getElementById('pm-yr').value=d.yr;
-    document.getElementById('pm-ca').value=d.ca;
-    document.getElementById('pm-cotier').value=d.cotier;
-    document.getElementById('pm-fluvial').value=d.fluvial;
-    document.getElementById('pm-hauturier').value=d.hauturier;
-    document.getElementById('pm-crr').value=d.crr;
-    document.getElementById('pm-code').value=d.code||80;
-    if(document.getElementById('pm-perf1')) document.getElementById('pm-perf1').value=d.perf1||20;
-    if(document.getElementById('pm-perf3')) document.getElementById('pm-perf3').value=d.perf3||7;
-    if(document.getElementById('pm-perf5')) document.getElementById('pm-perf5').value=d.perf5||3;
-    document.getElementById('pm-loyer').value=d.loyer||2600;
-    document.getElementById('pm-loyer-bat').value=d.loyerBat||456;
-    if(document.getElementById('pm-voiture')) document.getElementById('pm-voiture').value=d.voiture||715;
-    if(document.getElementById('pm-mutuelle')) document.getElementById('pm-mutuelle').value=d.mutuelle||240;
-    if(document.getElementById('pm-assurance')) document.getElementById('pm-assurance').value=d.assurance||218;
-    if(document.getElementById('pm-abocours')) document.getElementById('pm-abocours').value=d.aboCours||120;
-    if(document.getElementById('pm-communication')) document.getElementById('pm-communication').value=d.communication||12000;
-    if(document.getElementById('pm-entretien')) document.getElementById('pm-entretien').value=d.entretienBateau||0;
-    if(document.getElementById('pm-remuneration')) document.getElementById('pm-remuneration').value=d.remuneration||0;
-    document.getElementById('pm-autres').value=d.autres||0;
-    document.getElementById('pm-essence').value=d.essence||1500;
-    document.getElementById('pm-formateur').value=d.formateur||26.30;
+    function set(id,val){ const el=document.getElementById(id); if(el) el.value=val; }
+    set('pm-yr',d.yr);
+    set('pm-ca',d.ca);
+    set('pm-cotier',d.cotier);
+    set('pm-fluvial',d.fluvial);
+    set('pm-hauturier',d.hauturier);
+    set('pm-crr',d.crr);
+    set('pm-code',d.code||356);
+    set('pm-code-supp',d.codeSupp||10);
+    set('pm-perf1',d.perf1||20);
+    set('pm-perf3',d.perf3||7);
+    set('pm-perf5',d.perf5||3);
+    set('pm-loyer',d.loyer||2087);
+    set('pm-loyer-bat',d.loyerBat||466);
+    set('pm-place-port',d.placePort||3378);
+    set('pm-voiture',d.voiture||393);
+    set('pm-loc-divers',d.locDivers||1794);
+    set('pm-mutuelle',d.mutuelle||240);
+    set('pm-assurance',d.assurance||256);
+    set('pm-abocours',d.aboCours||120);
+    set('pm-telephone',d.telephone||80);
+    set('pm-electricite',d.electricite||417);
+    set('pm-carburant-voiture',d.carburantVoiture||1916);
+    set('pm-petit-equip',d.petitEquip||1116);
+    set('pm-fournitures-admin',d.fournituresAdmin||843);
+    set('pm-fournitures-permis',d.fournituresPermis||4199);
+    set('pm-fournitures',d.fournitures||500);
+    set('pm-formateur604',d.formateur604||12617);
+    set('pm-annonces',d.annonces||4007);
+    set('pm-communication',d.communication||12000);
+    set('pm-divers',d.divers||6288);
+    set('pm-transports',d.transports||77);
+    set('pm-entretien',d.entretienBateau||5721);
+    set('pm-entretien-transport',d.entretienTransport||378);
+    set('pm-entretien-bureau',d.entretienBureau||99);
+    set('pm-maintenance',d.maintenance||215);
+    set('pm-comptable',d.comptable||3074);
+    set('pm-remun-divers',d.remunDivers||1462);
+    set('pm-salaire',d.salaire||900);
+    set('pm-charges-soc',d.chargesSoc||571);
+    set('pm-essence',d.essence||1500);
   }
 }
+const PM_MONTHLY_2025 = [
+  {m:'Janvier',   cotier:18, fluvial:1, crr:2, hauturier:2, perf:1, code:24},
+  {m:'Février',   cotier:8,  fluvial:1, crr:1, hauturier:2, perf:0, code:10},
+  {m:'Mars',      cotier:40, fluvial:2, crr:1, hauturier:1, perf:0, code:36},
+  {m:'Avril',     cotier:20, fluvial:3, crr:1, hauturier:0, perf:0, code:30},
+  {m:'Mai',       cotier:28, fluvial:0, crr:1, hauturier:1, perf:0, code:39},
+  {m:'Juin',      cotier:32, fluvial:2, crr:2, hauturier:0, perf:0, code:34},
+  {m:'Juillet',   cotier:53, fluvial:0, crr:1, hauturier:0, perf:2, code:56},
+  {m:'Août',      cotier:47, fluvial:2, crr:0, hauturier:2, perf:8, code:50},
+  {m:'Septembre', cotier:17, fluvial:5, crr:3, hauturier:1, perf:2, code:19},
+  {m:'Octobre',   cotier:18, fluvial:0, crr:0, hauturier:0, perf:0, code:16},
+  {m:'Novembre',  cotier:13, fluvial:2, crr:2, hauturier:3, perf:1, code:10},
+  {m:'Décembre',  cotier:32, fluvial:1, crr:2, hauturier:3, perf:2, code:32}
+];
 function rPm(){
   const pd=getPmData();
   const tot=pd.cotier+pd.fluvial+pd.hauturier+pd.crr;
@@ -2287,22 +2425,104 @@ function rPm(){
   const pctR=tot?Math.round(pd.crr/tot*100):0;
   const pctPk=Math.max(0,100-pctC-pctF-pctH-pctR);
 
+  // ── KPIs dynamiques calculés sur les VRAIES données mensuelles 2025 ──
+  var topBox=document.getElementById('pm-top-kpis');
+  if(topBox){
+    var caReelTop=pd.ca||152367;
+
+    // CA estimé par mois (prix moyens pondérés par produit)
+    var prixMoy={cotier:330,fluvial:305,hauturier:392,crr:117,code:25};
+    var caParMois=PM_MONTHLY_2025.map(function(mo){
+      return mo.cotier*prixMoy.cotier+mo.fluvial*prixMoy.fluvial+mo.hauturier*prixMoy.hauturier+mo.crr*prixMoy.crr+mo.code*prixMoy.code;
+    });
+    var caEstAnnuel=caParMois.reduce(function(a,b){return a+b;},0);
+    // Recaler chaque mois au pro-rata du vrai CA réel encaissé
+    var scale=caEstAnnuel>0?caReelTop/caEstAnnuel:1;
+    var caReelParMois=caParMois.map(function(v){return v*scale;});
+
+    // Mois le plus fort / plus faible
+    var maxIdx=0,minIdx=0;
+    caReelParMois.forEach(function(v,i){ if(v>caReelParMois[maxIdx]) maxIdx=i; if(v<caReelParMois[minIdx]) minIdx=i; });
+    var moisFort=PM_MONTHLY_2025[maxIdx].m, moisFaible=PM_MONTHLY_2025[minIdx].m;
+
+    // Haute saison réelle : juillet+août (indices 6,7)
+    var hauteSaisonReelle=Math.round(caReelParMois[6]+caReelParMois[7]);
+    var hauteSaisonPct=Math.round(hauteSaisonReelle/caReelTop*100);
+
+    // Produit star : total réel par produit sur l'année (déjà dans pd)
+    var revenus={
+      'Côtier (toutes formules)': (pd.cotier||0)*330,
+      'Fluvial': (pd.fluvial||0)*305,
+      'Hauturier': (pd.hauturier||0)*392,
+      'CRR': (pd.crr||0)*117,
+      'Inscription Code': (pd.code||0)*25,
+      'Code supplémentaire': (pd.codeSupp||0)*183
+    };
+    var starName='—', starVal=0;
+    Object.keys(revenus).forEach(function(k){ if(revenus[k]>starVal){ starVal=revenus[k]; starName=k; } });
+    var caEstTotal=Object.values(revenus).reduce(function(a,b){return a+b;},0);
+    var starPct=caEstTotal>0?Math.round(starVal/caEstTotal*100):0;
+
+    // Seuil mensuel réel (charges fixes ÷ 12)
+    var seuilMensuelTop=Math.round((pd.loyer*12+pd.loyerBat*12+pd.placePort+pd.salaire*12+pd.chargesSoc*12+pd.formateur604+pd.comptable+pd.communication)/12);
+    var moisSousSeuilCount=caReelParMois.filter(function(v){return v<seuilMensuelTop;}).length;
+
+    topBox.innerHTML=
+      '<div class="kc kao"><div class="kl">CA réel total '+pd.yr+'</div><div class="kv">'+Math.round(caReelTop).toLocaleString()+' €</div><div class="ks">'+tot+' permis vendus</div><span class="kd pos">Mois le + fort : '+moisFort+'</span></div>'
+      +'<div class="kc kag"><div class="kl">Produit star</div><div class="kv" style="font-size:18px">'+starName+'</div><div class="ks">~'+Math.round(starVal).toLocaleString()+' € estimés</div><span class="kd pos">~'+starPct+'% du CA estimé</span></div>'
+      +'<div class="kc kaa"><div class="kl">Haute saison (Juil-Août)</div><div class="kv">~'+hauteSaisonReelle.toLocaleString()+' €</div><div class="ks">'+hauteSaisonPct+'% du CA réel '+pd.yr+'</div><span class="kd wn">Mois le + faible : '+moisFaible+'</span></div>'
+      +'<div class="kc kac"><div class="kl">Seuil mensuel</div><div class="kv">~'+seuilMensuelTop.toLocaleString()+' €</div><div class="ks">CA min pour couvrir les charges fixes</div><span class="kd '+(moisSousSeuilCount>0?'neg':'pos')+'">'+moisSousSeuilCount+' mois sous le seuil</span></div>';
+  }
+
+  // ── Répartition mensuelle détaillée ──────────────────────────────
+  var monthlyBox=document.getElementById('pm-monthly-box');
+  if(monthlyBox){
+    var prixMoy2={cotier:330,fluvial:305,hauturier:392,crr:117,code:25};
+    var rows=PM_MONTHLY_2025.map(function(mo){
+      var caMois=mo.cotier*prixMoy2.cotier+mo.fluvial*prixMoy2.fluvial+mo.hauturier*prixMoy2.hauturier+mo.crr*prixMoy2.crr+mo.code*prixMoy2.code;
+      var totMois=mo.cotier+mo.fluvial+mo.hauturier+mo.crr;
+      return '<tr><td><strong>'+mo.m+'</strong></td>'
+        +'<td class="mono right">'+mo.cotier+'</td>'
+        +'<td class="mono right">'+mo.fluvial+'</td>'
+        +'<td class="mono right">'+mo.hauturier+'</td>'
+        +'<td class="mono right">'+mo.crr+'</td>'
+        +'<td class="mono right" style="color:var(--tm)">'+mo.code+'</td>'
+        +'<td class="mono right" style="color:var(--tm)">'+mo.perf+'</td>'
+        +'<td class="mono right"><strong>'+totMois+'</strong></td>'
+        +'<td class="mono right" style="color:var(--g)">~'+Math.round(caMois).toLocaleString()+' €</td></tr>';
+    }).join('');
+    var totCot=PM_MONTHLY_2025.reduce(function(a,m){return a+m.cotier;},0);
+    var totFlu=PM_MONTHLY_2025.reduce(function(a,m){return a+m.fluvial;},0);
+    var totHau=PM_MONTHLY_2025.reduce(function(a,m){return a+m.hauturier;},0);
+    var totCrr=PM_MONTHLY_2025.reduce(function(a,m){return a+m.crr;},0);
+    var totCode=PM_MONTHLY_2025.reduce(function(a,m){return a+m.code;},0);
+    var totPerf=PM_MONTHLY_2025.reduce(function(a,m){return a+m.perf;},0);
+    var totAll=totCot+totFlu+totHau+totCrr;
+
+    monthlyBox.innerHTML='<div class="card sec"><div class="sh"><div class="st">📅 Répartition mensuelle réelle '+pd.yr+'</div><div class="ss">Détail par mois — données saisie/facturation</div></div>'
+      +'<div class="ovfl"><table class="dt"><thead><tr><th>Mois</th><th class="right">Côtier</th><th class="right">Fluvial</th><th class="right">Hauturier</th><th class="right">CRR</th><th class="right">Inscr. Code</th><th class="right">Perf</th><th class="right">Total permis</th><th class="right">CA estimé</th></tr></thead><tbody>'
+      +rows
+      +'<tr class="trt"><td><strong>TOTAL</strong></td><td class="mono right"><strong>'+totCot+'</strong></td><td class="mono right"><strong>'+totFlu+'</strong></td><td class="mono right"><strong>'+totHau+'</strong></td><td class="mono right"><strong>'+totCrr+'</strong></td><td class="mono right"><strong>'+totCode+'</strong></td><td class="mono right"><strong>'+totPerf+'</strong></td><td class="mono right" style="color:var(--oc)"><strong>'+totAll+'</strong></td><td class="mono right"></td></tr>'
+      +'</tbody></table></div></div>';
+  }
+
   // ── Tableau volumes vendus ─────────────────────────────────────
   var vBox=document.getElementById('pm-volumes-box');
   if(vBox){
     var tPerfCA=Math.round((pd.perf1||0)*79+(pd.perf3||0)*225+(pd.perf5||0)*354);
-    var caEst=Math.round((pd.cotier||0)*330+(pd.fluvial||0)*305+(pd.hauturier||0)*392+(pd.crr||0)*117+(pd.code||0)*25+tPerfCA);
-    vBox.innerHTML='<div class="card sec"><div class="sh"><div class="st">📊 Volumes vendus '+pd.yr+'</div><div class="ss">Total '+(tot)+' permis</div></div>'
+    var caEst=Math.round((pd.cotier||0)*330+(pd.fluvial||0)*305+(pd.hauturier||0)*392+(pd.crr||0)*117+(pd.code||0)*25+(pd.codeSupp||0)*183+tPerfCA);
+    vBox.innerHTML='<div class="card sec"><div class="sh"><div class="st">📊 Volumes vendus '+pd.yr+'</div><div class="ss">Total '+tot+' permis · '+(pd.code||0)+' inscriptions code · '+(pd.codeSupp||0)+' code suppl. · '+((pd.perf1||0)+(pd.perf3||0)+(pd.perf5||0))+' perf</div></div>'
       +'<div class="ovfl"><table class="dt"><thead><tr><th>Produit</th><th style="text-align:center">Qté</th><th style="text-align:center">% mix</th><th style="text-align:right">CA estimé</th></tr></thead><tbody>'
       +'<tr><td>🚢 Côtier (toutes formules)</td><td style="text-align:center;font-weight:700;font-size:16px">'+(pd.cotier||0)+'</td><td style="text-align:center"><span class="kd pos">'+pctC+'%</span></td><td style="text-align:right;font-family:monospace">~'+Math.round((pd.cotier||0)*330).toLocaleString()+' €</td></tr>'
       +'<tr><td>🌊 Fluvial</td><td style="text-align:center;font-weight:700;font-size:16px">'+(pd.fluvial||0)+'</td><td style="text-align:center"><span class="kd pos">'+pctF+'%</span></td><td style="text-align:right;font-family:monospace">~'+Math.round((pd.fluvial||0)*305).toLocaleString()+' €</td></tr>'
       +'<tr><td>⚓ Hauturier</td><td style="text-align:center;font-weight:700;font-size:16px">'+(pd.hauturier||0)+'</td><td style="text-align:center"><span class="kd wn">'+pctH+'%</span></td><td style="text-align:right;font-family:monospace">~'+Math.round((pd.hauturier||0)*392).toLocaleString()+' €</td></tr>'
       +'<tr><td>📻 CRR</td><td style="text-align:center;font-weight:700;font-size:16px">'+(pd.crr||0)+'</td><td style="text-align:center"><span class="kd wn">'+pctR+'%</span></td><td style="text-align:right;font-family:monospace">~'+Math.round((pd.crr||0)*117).toLocaleString()+' €</td></tr>'
-      +'<tr><td>📝 Code supplémentaire</td><td style="text-align:center;font-weight:700;font-size:16px">'+(pd.code||0)+'</td><td style="text-align:center">'+pctPk+'%</td><td style="text-align:right;font-family:monospace">~'+Math.round((pd.code||0)*183).toLocaleString()+' €</td></tr>'
+      +'<tr style="border-top:2px solid var(--bd)"><td style="color:var(--tm);font-size:12px">📝 Inscription Code (25€)</td><td style="text-align:center;font-weight:700;font-size:16px">'+(pd.code||0)+'</td><td style="text-align:center;color:var(--tm)">—</td><td style="text-align:right;font-family:monospace">~'+Math.round((pd.code||0)*25).toLocaleString()+' €</td></tr>'
+      +'<tr><td style="color:var(--tm);font-size:12px">📝 Code supplémentaire (183€)</td><td style="text-align:center;font-weight:700;font-size:16px">'+(pd.codeSupp||0)+'</td><td style="text-align:center;color:var(--tm)">—</td><td style="text-align:right;font-family:monospace">~'+Math.round((pd.codeSupp||0)*183).toLocaleString()+' €</td></tr>'
       +'<tr><td>⏱ Perf 1h</td><td style="text-align:center;font-weight:700;font-size:16px">'+(pd.perf1||0)+'</td><td style="text-align:center;color:var(--tm)">—</td><td style="text-align:right;font-family:monospace">~'+Math.round((pd.perf1||0)*79).toLocaleString()+' €</td></tr>'
       +'<tr><td>⏱ Perf 3h</td><td style="text-align:center;font-weight:700;font-size:16px">'+(pd.perf3||0)+'</td><td style="text-align:center;color:var(--tm)">—</td><td style="text-align:right;font-family:monospace">~'+Math.round((pd.perf3||0)*225).toLocaleString()+' €</td></tr>'
       +'<tr><td>⏱ Perf 5h</td><td style="text-align:center;font-weight:700;font-size:16px">'+(pd.perf5||0)+'</td><td style="text-align:center;color:var(--tm)">—</td><td style="text-align:right;font-family:monospace">~'+Math.round((pd.perf5||0)*354).toLocaleString()+' €</td></tr>'
-      +'<tr class="trt"><td><strong>TOTAL</strong></td><td style="text-align:center;font-weight:700;font-size:16px;color:var(--oc)"><strong>'+tot+' permis</strong></td><td style="text-align:center">100%</td><td style="text-align:right;font-family:monospace"><strong>~'+caEst.toLocaleString()+' €</strong></td></tr>'
+      +'<tr class="trt"><td><strong>TOTAL permis</strong></td><td style="text-align:center;font-weight:700;font-size:16px;color:var(--oc)"><strong>'+tot+'</strong></td><td style="text-align:center">—</td><td style="text-align:right;font-family:monospace"><strong>~'+caEst.toLocaleString()+' €</strong></td></tr>'
       +'</tbody></table></div></div>';
   }
 
@@ -2332,7 +2552,7 @@ function rPm(){
 
     var essenceAn=pd.essence||1500;
     var permisAvecPratique=(pd.cotier||0)+(pd.fluvial||0);
-    var totPermis=tot+(pd.code||0)+(pd.perf||0);
+    var totPermis=tot+(pd.code||0)+(pd.codeSupp||0); // perf exclu : pas des permis
     // ── Coûts directs par produit ────────────────────────────────
     // ECO/STD : 2h total = 1h moniteur + 1h essence, 2 élèves/sortie → ÷2
     // PRESTIGE : 4h total = 3h moniteur + 3h essence, 2 élèves/sortie → ÷2
@@ -2350,8 +2570,10 @@ function rPm(){
     // PRESTIGE : 3h/élève → 3 sorties pour 2 élèves
     // Perfectionnement : 1h/1h (heures saisies = heures réelles, 2 élèves si dispo)
     var perfH = (pd.perf1||0)*1 + (pd.perf3||0)*3 + (pd.perf5||0)*5; // heures nav perf
-    var hNavTotal = (permisAvecPratique * 0.95 * 1       // ECO/STD 1h
-                  + permisAvecPratique * 0.05 * 3        // PRESTIGE 3h
+    var mixPresPct = (pd.mixPres||6.7)/100;
+    var mixEcoStdPct = 1 - mixPresPct;
+    var hNavTotal = (permisAvecPratique * mixEcoStdPct * 1   // ECO/STD 1h
+                  + permisAvecPratique * mixPresPct * 3      // PRESTIGE 3h
                   + perfH * 1)                           // perf 1h/h vendu
                   / 2;                                   // ÷2 élèves/sortie
     var usureParH = hNavTotal > 0 ? usureAn / hNavTotal : 0; // €/h de sortie
@@ -2379,7 +2601,7 @@ function rPm(){
 
     // ── Abonnement cours salle 1 440€/an ÷ nb candidats éligibles ──────
     // Éligibles : Côtier + Fluvial + CRR + Code seul
-    var nbEligibles = (pd.cotier||0) + (pd.fluvial||0) + (pd.crr||0) + (pd.code||0);
+    var nbEligibles = (pd.cotier||0) + (pd.fluvial||0) + (pd.crr||0) + (pd.code||0) + (pd.codeSupp||0);
     var aboParCandidат = nbEligibles > 0 ? (aboCours * 12) / nbEligibles : 0;
 
 
@@ -2405,6 +2627,7 @@ function rPm(){
       hauturier:   coutComplet(70,    0,             0,               salleHaut,   0),
       crr:         coutComplet(2,     0,             0,               salleCode,   aboParCandidат),
       code:        coutComplet(5.60,  0,             0,               salleCode,   aboParCandidат),
+      codeSupp:    coutComplet(5.60,  0,             0,               salleCode,   aboParCandidат),
       perf:        coutComplet(0,     essencePerf,   formateurPerf,   0,           0)
     };
     var ccPerfH = cc.perf;
@@ -2447,15 +2670,16 @@ function rPm(){
       +'<div class="sh" style="margin-top:8px"><div class="st" style="font-size:13px">Marge réelle par produit</div>'
       +'<div class="ss">Livret + moniteur pratique (÷2 élèves/sortie) + essence+usure bateau (÷2) + gérant salle (~6€/h). CRR=même structure coût que Code (livret+abo, pas de salle). Hauturier=individuel.</div></div>'
       +'<table class="dt"><thead><tr><th>Produit</th><th class="right">Prix HT</th><th class="right">Coût complet</th><th class="right">Marge nette</th><th class="right">Qté</th><th class="right">Contribution</th></tr></thead><tbody>'
-      +lv('🚢','Côtier ECO',300,cc.cotierEco,Math.round((pd.cotier||0)*0.70))
-      +lv('🚢','Côtier STANDARD',350,cc.cotierStd,Math.round((pd.cotier||0)*0.25))
-      +lv('🚢','Côtier PRESTIGE',458,cc.cotierPres,Math.round((pd.cotier||0)*0.05))
-      +lv('🌊','Fluvial ECO',300,cc.fluvialEco,Math.round((pd.fluvial||0)*0.70))
-      +lv('🌊','Fluvial STANDARD',350,cc.fluvialStd,Math.round((pd.fluvial||0)*0.25))
-      +lv('🌊','Fluvial PRESTIGE',458,cc.fluvialPres,Math.round((pd.fluvial||0)*0.05))
+      +lv('🚢','Côtier ECO',300,cc.cotierEco,Math.round((pd.cotier||0)*((pd.mixEco||82.2)/100)))
+      +lv('🚢','Côtier STANDARD',350,cc.cotierStd,Math.round((pd.cotier||0)*((pd.mixStd||11.1)/100)))
+      +lv('🚢','Côtier PRESTIGE',458,cc.cotierPres,Math.round((pd.cotier||0)*((pd.mixPres||6.7)/100)))
+      +lv('🌊','Fluvial ECO',300,cc.fluvialEco,Math.round((pd.fluvial||0)*((pd.mixEco||82.2)/100)))
+      +lv('🌊','Fluvial STANDARD',350,cc.fluvialStd,Math.round((pd.fluvial||0)*((pd.mixStd||11.1)/100)))
+      +lv('🌊','Fluvial PRESTIGE',458,cc.fluvialPres,Math.round((pd.fluvial||0)*((pd.mixPres||6.7)/100)))
       +lv('⚓','Hauturier',392,cc.hauturier,pd.hauturier||0)
       +lv('📻','CRR Radio',117,cc.crr,pd.crr||0)
-      +lv('📝','Code supplémentaire',183,cc.code,pd.code||0)
+      +lv('📝','Inscription Code',25,cc.code,pd.code||0)
+      +lv('📝','Code supplémentaire',183,cc.codeSupp,pd.codeSupp||0)
       +lv('⏱','Perfectionnement 1h',79,cc.perf,pd.perf1||0)
       +lv('⏱','Perfectionnement 3h',225,coutComplet(0,essencePerf*3,formateurPerf*3,0,0),pd.perf3||0)
       +lv('⏱','Perfectionnement 5h',354,coutComplet(0,essencePerf*5,formateurPerf*5,0,0),pd.perf5||0)
@@ -3073,6 +3297,7 @@ setTimeout(()=>{buildSaisieGrid();}, 100);
   window.addEmprunt = addEmprunt;
   window.ls = ls;
   window.savePmData = savePmData;
+  window.toggleChargesDetail = toggleChargesDetail;
   window.validerSaisie = validerSaisie;
   window.highlightInput = highlightInput;
   window.sim = sim;
