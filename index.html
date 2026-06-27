@@ -339,7 +339,10 @@ body{font-family:'Dosis',sans-serif;background:var(--bg);color:var(--tp);font-si
   </div>
 </div>
 
-<div class="card sec"><div class="sh"><div class="st">CA mensuel 2026 — réalisé vs prévisionnel</div><div class="ss">Vert = en avance · Rouge = en retard</div></div><div class="cw" style="height:260px"><canvas id="c3"></canvas></div></div>
+<div class="card sec"><div class="sh"><div class="st">CA mensuel 2026 — réalisé vs prévisionnel vs seuil de rentabilité</div><div class="ss">Vert = en avance · Rouge = en retard · Ligne rouge pointillée = seuil de rentabilité mensuel</div></div>
+<div class="cw" style="height:280px"><canvas id="c3"></canvas></div>
+<div id="cPm3-alerte" style="margin-top:10px;padding:10px 14px;background:var(--al);border-radius:var(--rs);font-size:13px;color:#7D5A0A"></div>
+</div>
 <div class="card sec"><div class="sh"><div class="st">Détail mensuel 2026</div></div><div class="ovfl"><table class="dt"><thead><tr><th>Mois</th><th>Poids CA</th><th>Prév. TTC</th><th>Réalisé TTC</th><th>Perf.</th><th>Écart</th><th>Statut</th></tr></thead><tbody id="tb"></tbody></table></div></div>
 <div class="card sec"><div class="sh"><div class="st">Progression vs objectifs</div></div><div id="pb"></div></div>
 </div>
@@ -894,14 +897,14 @@ body{font-family:'Dosis',sans-serif;background:var(--bg);color:var(--tp);font-si
     <div id="charges-detail-section" style="display:none;margin-top:12px">
       <div style="font-size:11px;color:var(--tm);margin-bottom:10px">Ces valeurs alimentent le calcul de marge par produit ci-dessous. Pré-remplies avec le CR SOGECA 2025 certifié — à ne modifier que si vous avez des chiffres plus récents.</div>
       <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:12px">
-        <div><label style="font-size:12px;font-weight:500;color:var(--ts);display:block;margin-bottom:3px">Loyer locaux/mois</label>
-        <input type="number" id="pm-loyer" value="2087" style="width:100%;padding:6px 9px;border:1px solid var(--bd);border-radius:6px;font-family:'Dosis',sans-serif;font-size:13px"></div>
-        <div><label style="font-size:12px;font-weight:500;color:var(--ts);display:block;margin-bottom:3px">Crédit-bail bateau/mois</label>
+        <div><label style="font-size:12px;font-weight:500;color:var(--ts);display:block;margin-bottom:3px">Loyer locaux/mois (HT)</label>
+        <input type="number" id="pm-loyer" value="2167" style="width:100%;padding:6px 9px;border:1px solid var(--bd);border-radius:6px;font-family:'Dosis',sans-serif;font-size:13px"></div>
+        <div><label style="font-size:12px;font-weight:500;color:var(--ts);display:block;margin-bottom:3px">Crédit-bail bateau/mois (HT)</label>
         <input type="number" id="pm-loyer-bat" value="466" style="width:100%;padding:6px 9px;border:1px solid var(--bd);border-radius:6px;font-family:'Dosis',sans-serif;font-size:13px"></div>
-        <div><label style="font-size:12px;font-weight:500;color:var(--ts);display:block;margin-bottom:3px">Place au port/an</label>
-        <input type="number" id="pm-place-port" value="3378" style="width:100%;padding:6px 9px;border:1px solid var(--bd);border-radius:6px;font-family:'Dosis',sans-serif;font-size:13px"></div>
-        <div><label style="font-size:12px;font-weight:500;color:var(--ts);display:block;margin-bottom:3px">Location voiture/mois</label>
-        <input type="number" id="pm-voiture" value="393" style="width:100%;padding:6px 9px;border:1px solid var(--bd);border-radius:6px;font-family:'Dosis',sans-serif;font-size:13px"></div>
+        <div><label style="font-size:12px;font-weight:500;color:var(--ts);display:block;margin-bottom:3px">Place au port/an (HT)</label>
+        <input type="number" id="pm-place-port" value="3667" style="width:100%;padding:6px 9px;border:1px solid var(--bd);border-radius:6px;font-family:'Dosis',sans-serif;font-size:13px"></div>
+        <div><label style="font-size:12px;font-weight:500;color:var(--ts);display:block;margin-bottom:3px">Location voiture/mois (HT)</label>
+        <input type="number" id="pm-voiture" value="644" style="width:100%;padding:6px 9px;border:1px solid var(--bd);border-radius:6px;font-family:'Dosis',sans-serif;font-size:13px"></div>
         <div><label style="font-size:12px;font-weight:500;color:var(--ts);display:block;margin-bottom:3px">Locations diverses/an</label>
         <input type="number" id="pm-loc-divers" value="1794" style="width:100%;padding:6px 9px;border:1px solid var(--bd);border-radius:6px;font-family:'Dosis',sans-serif;font-size:13px"></div>
         <div><label style="font-size:12px;font-weight:500;color:var(--ts);display:block;margin-bottom:3px">Mutuelle/mois</label>
@@ -946,8 +949,8 @@ body{font-family:'Dosis',sans-serif;background:var(--bg);color:var(--tp);font-si
         <input type="number" id="pm-comptable" value="3074" style="width:100%;padding:6px 9px;border:1px solid var(--bd);border-radius:6px;font-family:'Dosis',sans-serif;font-size:13px"></div>
         <div><label style="font-size:12px;font-weight:500;color:var(--ts);display:block;margin-bottom:3px">Honoraires divers/an</label>
         <input type="number" id="pm-remun-divers" value="1462" style="width:100%;padding:6px 9px;border:1px solid var(--bd);border-radius:6px;font-family:'Dosis',sans-serif;font-size:13px"></div>
-        <div><label style="font-size:12px;font-weight:500;color:var(--ts);display:block;margin-bottom:3px">Salaire gérant net/mois</label>
-        <input type="number" id="pm-salaire" value="900" style="width:100%;padding:6px 9px;border:1px solid var(--bd);border-radius:6px;font-family:'Dosis',sans-serif;font-size:13px"></div>
+        <div><label style="font-size:12px;font-weight:500;color:var(--ts);display:block;margin-bottom:3px">Salaire gérant net/mois (pas de TVA)</label>
+        <input type="number" id="pm-salaire" value="1500" style="width:100%;padding:6px 9px;border:1px solid var(--bd);border-radius:6px;font-family:'Dosis',sans-serif;font-size:13px"></div>
         <div><label style="font-size:12px;font-weight:500;color:var(--ts);display:block;margin-bottom:3px">Charges sociales gérant/mois</label>
         <input type="number" id="pm-charges-soc" value="571" style="width:100%;padding:6px 9px;border:1px solid var(--bd);border-radius:6px;font-family:'Dosis',sans-serif;font-size:13px"></div>
         <div><label style="font-size:12px;font-weight:500;color:var(--ts);display:block;margin-bottom:3px">Budget essence bateau/an</label>
@@ -1034,13 +1037,6 @@ body{font-family:'Dosis',sans-serif;background:var(--bg);color:var(--tp);font-si
   <div class="tlamt">Potentiel lissage : +8 000 €/hiver</div>
 </div></div>
 </div>
-</div>
-</div>
-
-<div class="card sec"><div class="sh"><div class="st">Comparatif CA mensuel 2025 vs seuil de rentabilité</div></div>
-<div class="cw" style="height:220px"><canvas id="cPm3"></canvas></div>
-<div style="margin-top:10px;padding:10px 14px;background:var(--al);border-radius:var(--rs);font-size:13px;color:#7D5A0A">
-⚠️ <strong>5 mois sous le seuil de rentabilité mensuel (~11 667 €)</strong> en 2026 sur les 5 connus. La haute saison (Juil–Août–Sept) doit compenser. Le seuil annuel est ~140 000 € de charges — il faut 152 k€+ de CA pour être bénéficiaire.
 </div>
 </div>
 
@@ -1997,14 +1993,35 @@ function rS26(){
     alertesEl.innerHTML=html;
   }
   const bg=D26.real.map((v,i)=>v===null?'rgba(26,107,154,.2)':v>=D26.prev[i]?'rgba(26,188,156,.78)':'rgba(231,76,60,.75)');
+
+  // Seuil de rentabilité dynamique (depuis Analyse Permis)
+  let seuilC3=11667;
+  try{
+    const pdSeuil=getPmData();
+    seuilC3=Math.round((pdSeuil.loyer*12+pdSeuil.loyerBat*12+pdSeuil.placePort+pdSeuil.salaire*12+pdSeuil.chargesSoc*12+pdSeuil.formateur604+pdSeuil.comptable+pdSeuil.communication)/12);
+  }catch(e){}
+
   mk('c3','bar',{
     labels:D26.mois.map(m=>m.substring(0,3)),
     datasets:[
       {label:'Prévisionnel',data:D26.prev,backgroundColor:'rgba(26,107,154,.18)',borderColor:C.ol,borderWidth:1,borderRadius:4,order:2},
       {label:'Réalisé',data:D26.real,backgroundColor:bg,borderRadius:4,order:1},
       {label:'Résultat prévu',data:D26.prev.map((p,i)=>p-D26.chg[i]),type:'line',borderColor:C.a,borderDash:[4,3],pointRadius:3,pointBackgroundColor:C.a,fill:false,tension:.3,borderWidth:1.5,order:0},
+      {label:'Seuil rentabilité '+seuilC3.toLocaleString('fr-FR')+'€',data:Array(12).fill(seuilC3),type:'line',borderColor:'#E74C3C',borderDash:[6,3],borderWidth:2,pointRadius:0,fill:false,order:0},
     ]
   },{plugins:{legend:{display:true,position:'bottom',labels:{font:{size:11},usePointStyle:true}},tooltip:{callbacks:{label:c=>c.dataset.label+': '+(c.raw!=null?c.raw.toLocaleString('fr-FR')+' €':'—')}}},scales:{x:{grid:{display:false},ticks:{color:C.gr,autoSkip:false,font:{size:11}}},y:{ticks:{color:C.gr,callback:v=>(v>=0?'':'-')+Math.abs(v/1000).toFixed(0)+'k€'},grid:{color:C.bd}}}});
+
+  // Alerte seuil de rentabilité (fusionnée, sous le graphique)
+  const seuilAlerteEl=document.getElementById('cPm3-alerte');
+  if(seuilAlerteEl){
+    const moisConnusC3=D26.real.filter(v=>v!==null);
+    const moisSousCountC3=moisConnusC3.filter(v=>v<seuilC3).length;
+    if(moisConnusC3.length>0){
+      seuilAlerteEl.innerHTML='⚠️ <strong>'+moisSousCountC3+' mois sous le seuil de rentabilité mensuel (~'+seuilC3.toLocaleString('fr-FR')+' €)</strong> en '+D26.annee+' sur les '+moisConnusC3.length+' connus. La haute saison (Juil–Août–Sept) doit compenser. Le seuil annuel est ~'+(seuilC3*12).toLocaleString('fr-FR')+' € de charges.';
+    } else {
+      seuilAlerteEl.innerHTML='ℹ️ Aucune donnée saisie encore pour '+D26.annee+'. Renseignez le CA mensuel ci-dessus pour activer le comparatif.';
+    }
+  }
 
   const tb=document.getElementById('tb');
   if(tb) tb.innerHTML=D26.mois.map((m,i)=>{
@@ -2036,6 +2053,7 @@ function rS26(){
     <div class="pi" style="margin-bottom:0"><div class="ph"><span class="pl">Projection si performance = ${perfPeriode.toFixed(0)}% sur reste année</span><span class="pv" style="color:${projPerf>=tP?'#0E8A6E':'#C0392B'}">${Math.round(projPerf).toLocaleString('fr-FR')} €</span></div><div class="pt"><div class="pf" style="width:${Math.min(Math.round(projPerf/tP*100),100)}%;background:${projPerf>=tP?'#1f9fb7':'#F39C12'}"></div></div></div>
     `;
   }
+
 }
 function rHi(){
   // Mettre à jour le titre et note dynamiquement
@@ -2288,7 +2306,7 @@ function sim(){
 
 function getPmData(){
   try{const s=localStorage.getItem('nh_permis');if(s)return JSON.parse(s);}catch(e){}
-  return {yr:2025,ca:152367,cotier:326,fluvial:19,hauturier:15,crr:16,code:356,codeSupp:10,perf1:13,perf3:2,perf5:0,mixEco:82.2,mixStd:11.1,mixPres:6.7,loyer:2087,loyerBat:466,placePort:3378,voiture:393,locDivers:1794,entretienBateau:5721,entretienTransport:378,entretienBureau:99,maintenance:215,assurance:256,carburantVoiture:1916,petitEquip:1116,fournituresAdmin:843,fournituresPermis:4199,electricite:417,fournitures:500,formateur604:12617,salaire:900,chargesSoc:571,remunDivers:1462,mutuelle:240,aboCours:120,telephone:80,communication:12000,annonces:4007,divers:6288,transports:77,comptable:3074,amortissements:8512,chargesFinancieres:3695,autres:0,essence:1500,formateur:0};
+  return {yr:2025,ca:152367,cotier:326,fluvial:19,hauturier:15,crr:16,code:356,codeSupp:10,perf1:13,perf3:2,perf5:0,mixEco:82.2,mixStd:11.1,mixPres:6.7,loyer:2167,loyerBat:466,placePort:3667,voiture:644,locDivers:1794,entretienBateau:5721,entretienTransport:378,entretienBureau:99,maintenance:215,assurance:256,carburantVoiture:1916,petitEquip:1116,fournituresAdmin:843,fournituresPermis:4199,electricite:417,fournitures:500,formateur604:12617,salaire:1500,chargesSoc:571,remunDivers:1462,mutuelle:240,aboCours:120,telephone:80,communication:12000,annonces:4007,divers:6288,transports:77,comptable:3074,amortissements:8512,chargesFinancieres:3695,autres:0,essence:1500,formateur:0};
 }
 function savePmData(){
   const d={
@@ -2340,6 +2358,7 @@ function savePmData(){
   try{localStorage.setItem('nh_permis',JSON.stringify(d));}catch(e){}
   togglePmEdit();
   rPm();
+  if(document.getElementById('c3')) rS26();
 }
 function g(id,def){ const el=document.getElementById(id); return el?el.value:def; }
 function toggleChargesDetail(){
@@ -2714,7 +2733,7 @@ function rPm(){
 
   // Saisonnalité 2025 vs 2026
   const m25=[13100,7200,12400,15900,9800,11600,23000,16700,14100,9800,7200,9600];
-  const m26=[11770,6228,10550,15021,4090,null,null,null,null,null,null,null];
+  const m26=(D26.real||[]).map(function(v){ return (v===undefined||v===null)?null:v; });
   mk('cPm2','bar',{
     labels:['Jan','Fév','Mar','Avr','Mai','Jun','Jul','Aoû','Sep','Oct','Nov','Déc'],
     datasets:[
@@ -2723,18 +2742,6 @@ function rPm(){
       {label:'Seuil 11 667€',data:Array(12).fill(11667),type:'line',borderColor:'#E74C3C',borderDash:[5,3],borderWidth:1.5,pointRadius:0,fill:false,order:0},
     ]
   },{plugins:{legend:{display:true,position:'bottom',labels:{font:{size:11},usePointStyle:true}}},scales:{x:{grid:{display:false},ticks:{color:C.gr,font:{size:10}}},y:{ticks:{color:C.gr,callback:v=>v/1000+'k€'},grid:{color:C.bd}}}});
-
-  // CA mensuel vs seuil
-  const months=['Jan','Fév','Mar','Avr','Mai','Jun','Jul','Aoû','Sep','Oct','Nov','Déc'];
-  const real26=[11770,6228,10550,15021,4090,null,null,null,null,null,null,null];
-  const seuil=11667;
-  mk('cPm3','bar',{
-    labels:months,
-    datasets:[
-      {label:'CA 2026 réalisé',data:real26,backgroundColor:real26.map(v=>v===null?'rgba(20,121,173,.15)':v>=seuil?'rgba(31,159,183,.8)':'rgba(231,76,60,.75)'),borderRadius:4,order:1},
-      {label:'Seuil rentabilité 11 667€',data:Array(12).fill(seuil),type:'line',borderColor:'#E74C3C',borderDash:[6,3],borderWidth:2,pointRadius:0,fill:false,order:0},
-    ]
-  },{plugins:{legend:{display:true,position:'bottom',labels:{font:{size:11},usePointStyle:true}},tooltip:{callbacks:{label:c=>c.dataset.label+': '+(c.raw!==null?c.raw.toLocaleString('fr-FR')+' €':'Non réalisé')}}},scales:{x:{grid:{display:false},ticks:{color:C.gr,font:{size:11}}},y:{min:0,ticks:{color:C.gr,callback:v=>v/1000+'k€'},grid:{color:C.bd}}}});
 }
 
 
