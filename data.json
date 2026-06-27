@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-06-11T10:28:32.697Z",
+  "timestamp": "2026-06-27T16:51:03.468Z",
   "device": "Macintosh; Intel Mac OS X 10.15; rv:151.0",
   "data": {
     "nh_emprunts": "[{\"id\":1,\"nom\":\"CA 10k€ n°2410235\",\"initial\":10000,\"restant\":0,\"mensualite\":170.94,\"echeance\":\"Juin 2026\",\"couleur\":\"#65bfaf\",\"actif\":false,\"lastUpdate\":\"2026-06\"},{\"id\":2,\"nom\":\"CA 15k€ n°3534812\",\"initial\":15000,\"restant\":2979.62,\"mensualite\":449.23,\"echeance\":\"Janv. 2027\",\"couleur\":\"#F39C12\",\"actif\":true,\"lastUpdate\":\"2026-06\"},{\"id\":3,\"nom\":\"BNP 50k€ n°6078112249\",\"initial\":50000,\"restant\":31115.68,\"mensualite\":986.72,\"echeance\":\"Mai 2029\",\"couleur\":\"#E74C3C\",\"actif\":true,\"lastUpdate\":\"2026-06\"},{\"id\":4,\"nom\":\"Pouyanne 30k€ n°1027976\",\"initial\":30000,\"restant\":18132.5,\"mensualite\":567.75,\"echeance\":\"Mai 2029\",\"couleur\":\"#1479ad\",\"actif\":true,\"lastUpdate\":\"2026-06\"}]",
