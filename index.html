@@ -1831,7 +1831,7 @@ const MOIS_KEYS = ['jan','fev','mar','avr','mai','jun','jul','aou','sep','oct','
 const D26={
   mois:['Janvier','Février','Mars','Avril','Mai','Juin','Juillet','Août','Septembre','Octobre','Novembre','Décembre'],
   chg: [11667,11667,11667,11667,11667,11519,11519,11519,11519,11519,11519,11519],
-  real:[11770,6228,10550,15021,4090,null,null,null,null,null,null,null],
+  real:[11770,6228,10550,15021,10899,18869.5,null,null,null,null,null,null],
   annee: new Date().getFullYear()
 };
 
@@ -1849,7 +1849,27 @@ function buildPrevFromRecords(){
   const r=getRecords();
   return MOIS_KEYS.map(k=>r[k]?r[k].val:0);
 }
-D26.prev = buildPrevFromRecords();
+
+// Charger ou initialiser le prévisionnel annuel (figé au 1er janvier)
+function loadOrInitPrev(){
+  // 2026 : prévisionnel figé basé sur les records pré-2026
+  // Ces valeurs sont fixes et ne changent pas en cours d'année
+  const PREV_FIXES={
+    2026:[8937,6730,17406,9503,12240,14545,22259,21448,17650,11968,11463,15400]
+  };
+  if(PREV_FIXES[D26.annee]) return PREV_FIXES[D26.annee];
+
+  // Autres années : charger depuis localStorage ou créer
+  const key='nh_prev_'+D26.annee;
+  try{
+    const s=localStorage.getItem(key);
+    if(s){const arr=JSON.parse(s);if(Array.isArray(arr)&&arr.length===12)return arr;}
+  }catch(e){}
+  const prev=buildPrevFromRecords();
+  try{localStorage.setItem(key,JSON.stringify(prev));}catch(e){}
+  return prev;
+}
+D26.prev = loadOrInitPrev();
 
 function loadRealData(){
   try{
@@ -1879,7 +1899,8 @@ function checkAndUpdateRecords(){
   });
   if(updated){
     saveRecords(r);
-    D26.prev=buildPrevFromRecords();
+    // NE PAS recalculer D26.prev ici : le prévisionnel est figé au début de l'année
+    // Les records mis à jour serviront de base pour l'année SUIVANTE uniquement
   }
   return updated;
 }
