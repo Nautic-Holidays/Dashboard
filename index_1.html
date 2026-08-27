@@ -3128,21 +3128,31 @@ function downloadPDF(){
   const cli = document.getElementById('cli-nom').value || 'client';
   const filename = `${fac_docType}-${num}-${cli}.pdf`.replace(/\s+/g,'-');
   const el = document.getElementById('facture-html');
-  // Hauteur réelle du contenu → PDF exactement 1 page, jamais de page blanche
-  const elH = el.scrollHeight;
-  const elW = el.scrollWidth || 794;
-  const pageW = 210;
-  const margin = 8;
-  const pageH = Math.ceil((elH / elW) * (pageW - margin * 2)) + margin * 2 + 10;
-  const opt = {
-    margin: [margin, margin, margin, margin],
-    filename,
-    image: {type:'jpeg', quality:0.98},
-    html2canvas: {scale:2, useCORS:true, letterRendering:true, scrollX:0, scrollY:0},
-    jsPDF: {unit:'mm', format:[pageW, pageH], orientation:'portrait'},
-    pagebreak: {mode:'avoid-all'}
-  };
-  html2pdf().set(opt).from(el).save();
+
+  // Capturer le contenu exact en canvas
+  html2canvas(el, {
+    scale: 2,
+    useCORS: true,
+    letterRendering: true,
+    scrollX: 0,
+    scrollY: 0,
+    backgroundColor: '#ffffff',
+    width: el.scrollWidth,
+    height: el.scrollHeight
+  }).then(function(canvas){
+    const imgData = canvas.toDataURL('image/jpeg', 0.98);
+    // Créer un PDF exactement à la taille du contenu capturé (jamais de 2e page)
+    const pdfW = 210; // A4 largeur mm
+    const pdfH = (canvas.height / canvas.width) * pdfW;
+    const {jsPDF} = window.jspdf;
+    const pdf = new jsPDF({
+      orientation: 'portrait',
+      unit: 'mm',
+      format: [pdfW, pdfH]
+    });
+    pdf.addImage(imgData, 'JPEG', 0, 0, pdfW, pdfH, '', 'FAST');
+    pdf.save(filename);
+  });
 }
 
 // ── Sauvegarde ─────────────────────────────────────────────────────────
