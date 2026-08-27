@@ -1,11 +1,11 @@
 {
-  "timestamp": "2026-08-27T08:32:40.925Z",
+  "timestamp": "2026-08-27T12:35:59.067Z",
   "device": "Macintosh; Intel Mac OS X 10_15_7",
   "data": {
     "nh_doc_22405": "{\"docType\":\"FACTURE\",\"num\":\"22405\",\"date\":\"2026-05-26\",\"validity\":\"2026-06-28\",\"projet\":\"\",\"desc\":\"\",\"cliNom\":\"OneTrust SAS\",\"cliAdr1\":\"24 rue Mogador\",\"cliAdr2\":\"\",\"cliCp\":\"75009\",\"cliVille\":\"PARIS\",\"cliEmail\":\"\",\"note\":\"Merci de votre confiance,\\nNous serons heureux de vous accueillir dans notre centre de formations !\\nL'équipe Nautic Holidays.\",\"timbreOn\":false,\"timbreVal\":\"78\",\"lines\":[{\"desc\":\"Séminaire / Évènement\",\"qty\":1,\"pu\":333.33},{\"desc\":\"Remise 10%\",\"qty\":1,\"pu\":-33.33}],\"savedAt\":\"2026-05-29T22:34:31.026Z\"}",
-    "nh_records": "{\"jan\":{\"val\":11770,\"yr\":2026},\"fev\":{\"val\":6730,\"yr\":2023},\"mar\":{\"val\":17406,\"yr\":2025},\"avr\":{\"val\":15021,\"yr\":2026},\"mai\":{\"val\":12240,\"yr\":2023},\"jun\":{\"val\":18869.5,\"yr\":2026},\"jul\":{\"val\":22259,\"yr\":2025},\"aou\":{\"val\":24847.75,\"yr\":2026},\"sep\":{\"val\":17650,\"yr\":2023},\"oct\":{\"val\":11968,\"yr\":2024},\"nov\":{\"val\":11463,\"yr\":2023},\"dec\":{\"val\":15400,\"yr\":2022}}",
+    "nh_records": "{\"jan\":{\"val\":11770,\"yr\":2026},\"fev\":{\"val\":6730,\"yr\":2023},\"mar\":{\"val\":17406,\"yr\":2025},\"avr\":{\"val\":15021,\"yr\":2026},\"mai\":{\"val\":12240,\"yr\":2023},\"jun\":{\"val\":18869.5,\"yr\":2026},\"jul\":{\"val\":22259,\"yr\":2025},\"aou\":{\"val\":25207.75,\"yr\":2026},\"sep\":{\"val\":17650,\"yr\":2023},\"oct\":{\"val\":11968,\"yr\":2024},\"nov\":{\"val\":11463,\"yr\":2023},\"dec\":{\"val\":15400,\"yr\":2022}}",
     "nh_last_year": "2026",
-    "nh_real_2026": "[11770,6228,10550,15021,10899,18869.5,15459.65,24847.75,null,null,null,null]",
+    "nh_real_2026": "[11770,6228,10550,15021,10899,18869.5,15459.65,25207.75,null,null,null,null]",
     "nh_emprunts": "[{\"id\":1,\"nom\":\"CA 10k€ n°2410235\",\"initial\":10000,\"restant\":0,\"mensualite\":170.94,\"echeance\":\"Juin 2026\",\"couleur\":\"#65bfaf\",\"actif\":false,\"lastUpdate\":\"2026-06\"},{\"id\":2,\"nom\":\"CA 15k€ n°3534812\",\"initial\":15000,\"restant\":2979.62,\"mensualite\":449.23,\"echeance\":\"Janv. 2027\",\"couleur\":\"#F39C12\",\"actif\":true,\"lastUpdate\":\"2026-06\"},{\"id\":3,\"nom\":\"BNP 50k€ n°6078112249\",\"initial\":50000,\"restant\":31115.68,\"mensualite\":986.72,\"echeance\":\"Mai 2029\",\"couleur\":\"#E74C3C\",\"actif\":true,\"lastUpdate\":\"2026-06\"},{\"id\":4,\"nom\":\"Pouyanne 30k€ n°1027976\",\"initial\":30000,\"restant\":18132.5,\"mensualite\":567.75,\"echeance\":\"Mai 2029\",\"couleur\":\"#1479ad\",\"actif\":true,\"lastUpdate\":\"2026-06\"}]"
   }
 }
