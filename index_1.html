@@ -3128,18 +3128,21 @@ function downloadPDF(){
   const cli = document.getElementById('cli-nom').value || 'client';
   const filename = `${fac_docType}-${num}-${cli}.pdf`.replace(/\s+/g,'-');
   const el = document.getElementById('facture-html');
+  // Hauteur réelle du contenu → PDF exactement 1 page, jamais de page blanche
+  const elH = el.scrollHeight;
+  const elW = el.scrollWidth || 794;
+  const pageW = 210;
+  const margin = 8;
+  const pageH = Math.ceil((elH / elW) * (pageW - margin * 2)) + margin * 2 + 10;
   const opt = {
-    margin: [8,8,8,8],
+    margin: [margin, margin, margin, margin],
     filename,
     image: {type:'jpeg', quality:0.98},
-    html2canvas: {scale:2, useCORS:true, letterRendering:true},
-    jsPDF: {unit:'mm', format:'a4', orientation:'portrait'},
+    html2canvas: {scale:2, useCORS:true, letterRendering:true, scrollX:0, scrollY:0},
+    jsPDF: {unit:'mm', format:[pageW, pageH], orientation:'portrait'},
     pagebreak: {mode:'avoid-all'}
   };
-  html2pdf().set(opt).from(el).toPdf().get('pdf').then(function(pdf){
-    const total = pdf.internal.getNumberOfPages();
-    if(total > 1) pdf.deletePage(total);
-  }).save();
+  html2pdf().set(opt).from(el).save();
 }
 
 // ── Sauvegarde ─────────────────────────────────────────────────────────
