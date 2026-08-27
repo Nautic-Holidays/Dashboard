@@ -1197,27 +1197,13 @@ body{font-family:'Dosis',sans-serif;background:var(--bg);color:var(--tp);font-si
           <div class="custom-select-option" data-value="__remise_partenaire__|0|0">Remise Partenaires (% à saisir)</div>
         </div>
       </div>
-      <div id="remise-partenaire-wrap" style="display:none;flex-direction:column;gap:6px;background:var(--gl);border:1.5px solid var(--oc);border-radius:8px;padding:8px 10px;min-width:220px">
+      <div id="remise-partenaire-wrap" style="display:none;flex-direction:column;gap:5px;background:var(--gl);border:1.5px solid var(--oc);border-radius:8px;padding:8px 10px;min-width:210px">
         <div style="font-size:11px;font-weight:700;color:var(--oc)">Remise Partenaires</div>
-        <div style="display:flex;gap:6px;align-items:center">
-          <label style="font-size:11px;color:var(--ts);display:flex;align-items:center;gap:4px;cursor:pointer">
-            <input type="radio" name="rp-mode" id="rp-mode-pct" value="pct" checked onchange="toggleRpMode()"> Par %
-          </label>
-          <label style="font-size:11px;color:var(--ts);display:flex;align-items:center;gap:4px;cursor:pointer">
-            <input type="radio" name="rp-mode" id="rp-mode-ttc" value="ttc" onchange="toggleRpMode()"> Montant TTC cible
-          </label>
+        <div style="display:flex;align-items:center;gap:6px">
+          <input type="number" id="remise-partenaire-val" min="0" step="0.01" placeholder="% ou montant TTC" style="width:130px;padding:5px 8px;border:1.5px solid var(--bd);border-radius:6px;font-family:'Dosis',sans-serif;font-size:13px;text-align:center" oninput="calcRpPct()">
         </div>
-        <div id="rp-pct-row" style="display:flex;align-items:center;gap:6px">
-          <input type="number" id="remise-partenaire-pct" min="0" max="100" step="0.01" placeholder="ex: 16.67" style="width:80px;padding:5px 8px;border:1.5px solid var(--bd);border-radius:6px;font-family:'Dosis',sans-serif;font-size:13px;text-align:center">
-          <span style="font-size:12px;color:var(--ts)">%</span>
-        </div>
-        <div id="rp-ttc-row" style="display:none;flex-direction:column;gap:4px">
-          <div style="display:flex;align-items:center;gap:6px">
-            <input type="number" id="remise-partenaire-ttc" min="0" step="0.5" placeholder="ex: 600" style="width:90px;padding:5px 8px;border:1.5px solid var(--bd);border-radius:6px;font-family:'Dosis',sans-serif;font-size:13px;text-align:center" oninput="calcRpPct()">
-            <span style="font-size:12px;color:var(--ts)">€ TTC</span>
-          </div>
-          <div id="rp-pct-calc" style="font-size:11px;color:var(--oc)"></div>
-        </div>
+        <div style="font-size:10px;color:var(--tm)">Saisir un % (ex: 10) <strong>ou</strong> le montant TTC final souhaité (ex: 600)</div>
+        <div id="rp-pct-calc" style="font-size:11px;color:var(--oc);font-weight:600"></div>
       </div>
       <button class="add-btn" onclick="addFromSelect()">+ Ajouter</button>
     </div>
@@ -1351,40 +1337,32 @@ function addFromSelect(){
   const val = sel.value; if(!val) return;
   const parts = val.split('|');
   if(parts[0] === '__remise_partenaire__'){
-    var modeEl = document.querySelector('input[name="rp-mode"]:checked');
-    var mode = modeEl ? modeEl.value : 'pct';
-    var currentHT = fac_lines.reduce(function(a,l){ return a + l.qty*l.pu; }, 0);
-    var pctSaisi = 0;
-    if(mode === 'pct'){
-      pctSaisi = parseFloat(document.getElementById('remise-partenaire-pct').value);
-      if(isNaN(pctSaisi) || pctSaisi <= 0){ alert('Saisissez un pourcentage.'); return; }
+    var valElrp = document.getElementById('remise-partenaire-val');
+    var valrp = valElrp ? parseFloat(valElrp.value) : 0;
+    if(isNaN(valrp) || valrp <= 0){ alert('Saisissez un pourcentage (ex: 10) ou un montant TTC final (ex: 600).'); return; }
+    var totHTElrp = document.getElementById('tot-ht');
+    var currentHTrp = totHTElrp ? parseFloat(totHTElrp.textContent.replace(/\s/g,'').replace(',','.').replace('€','')) : 0;
+    if(currentHTrp <= 0){ alert('Ajoutez des produits avant d\'appliquer une remise.'); return; }
+    var remiseHTrp = 0; var pctLabelrp = '';
+    if(valrp <= 100){
+      remiseHTrp = -Math.round(currentHTrp * valrp / 100 * 100) / 100;
+      pctLabelrp = String(valrp) + '%|' + parseFloat(valrp).toFixed(10);
     } else {
-      var ttcCible = parseFloat(document.getElementById('remise-partenaire-ttc').value);
-      if(isNaN(ttcCible) || ttcCible <= 0){ alert('Saisissez un montant TTC cible.'); return; }
-      var htCible = Math.round((ttcCible / 1.20) * 100) / 100;
-      var remiseHTExacte = Math.round((htCible - currentHT) * 100) / 100; // négatif
-      if(remiseHTExacte >= 0){ alert('Le montant TTC cible est supérieur ou égal au total actuel.'); return; }
-      var pctInfo = Math.round((-remiseHTExacte / currentHT) * 10000) / 100;
-      var pctLabel2 = pctInfo.toFixed(2).replace('.',',');
-      addLine('Remise Partenaires ' + pctLabel2 + '%', 1, remiseHTExacte);
-      var wrap2 = document.getElementById('remise-partenaire-wrap');
-      if(wrap2){ wrap2.style.display = 'none'; }
-      var inpTtc2 = document.getElementById('remise-partenaire-ttc'); if(inpTtc2) inpTtc2.value='';
-      var calcEl2 = document.getElementById('rp-pct-calc'); if(calcEl2) calcEl2.textContent='';
-      var sel3 = document.getElementById('product-select'); if(sel3) sel3.value='';
-      var lbl3 = document.getElementById('custom-select-label'); if(lbl3) lbl3.textContent='— Choisir un produit —';
-      return;
+      var ttcTotActuelrp = Math.round(currentHTrp * 1.20 * 100) / 100;
+      if(valrp >= ttcTotActuelrp){ alert('Le montant TTC saisi (' + valrp + ' €) est supérieur ou égal au total TTC actuel (' + ttcTotActuelrp + ' €).'); return; }
+      var htCiblerp = Math.round(valrp / 1.20 * 100) / 100;
+      remiseHTrp = Math.round((htCiblerp - currentHTrp) * 100) / 100;
+      var pctInforp = (-remiseHTrp / currentHTrp) * 100;
+      var pctAffiche = pctInforp.toFixed(2).replace('.',',');
+      pctLabelrp = pctAffiche + '%|' + pctInforp.toFixed(10); // affiché|précis
     }
-    var remiseHT = -(currentHT * pctSaisi / 100);
-    var pctLabel = pctSaisi % 1 === 0 ? String(pctSaisi) : pctSaisi.toFixed(2).replace('.',',');
-    addLine('Remise Partenaires ' + pctLabel + '%', 1, parseFloat(remiseHT.toFixed(2)));
-    var wrap = document.getElementById('remise-partenaire-wrap');
-    if(wrap){ wrap.style.display = 'none'; }
-    var inpPct = document.getElementById('remise-partenaire-pct'); if(inpPct) inpPct.value='';
-    var inpTtc = document.getElementById('remise-partenaire-ttc'); if(inpTtc) inpTtc.value='';
-    var calcEl = document.getElementById('rp-pct-calc'); if(calcEl) calcEl.textContent='';
-    var sel2 = document.getElementById('product-select'); if(sel2) sel2.value='';
-    var lbl2 = document.getElementById('custom-select-label'); if(lbl2) lbl2.textContent='— Choisir un produit —';
+    addLine('Remise Partenaires ' + pctLabelrp, 1, remiseHTrp);
+    var wraprp = document.getElementById('remise-partenaire-wrap');
+    if(wraprp){ wraprp.style.display = 'none'; }
+    if(valElrp) valElrp.value = '';
+    var calcElrp = document.getElementById('rp-pct-calc'); if(calcElrp) calcElrp.textContent='';
+    var sel2rp = document.getElementById('product-select'); if(sel2rp) sel2rp.value='';
+    var lbl2rp = document.getElementById('custom-select-label'); if(lbl2rp) lbl2rp.textContent='— Choisir un produit —';
     return;
   } else if(parts[0] === '__remise__'){
     const pct = parseFloat(parts[1]) || 5;
@@ -1473,7 +1451,7 @@ function render(){
 
   const lignesHTML = lines.map(l => `
     <tr>
-      <td>${l.desc}</td>
+      <td>${l.desc.split('|')[0]}</td>
       <td>${l.qty}</td>
       <td>${fmtPU(l.pu)} €</td>
       <td>${fmt(l.qty*l.pu)}</td>
@@ -2459,17 +2437,29 @@ function toggleRpMode(){
   }
 }
 function calcRpPct(){
-  var ttcCible = parseFloat(document.getElementById('remise-partenaire-ttc').value);
+  var valEl = document.getElementById('remise-partenaire-val');
   var calcEl = document.getElementById('rp-pct-calc');
-  if(!calcEl) return;
-  if(isNaN(ttcCible) || ttcCible <= 0){ calcEl.textContent=''; return; }
-  var currentHT = fac_lines.reduce(function(a,l){ return a + l.qty*l.pu; }, 0);
-  var htCible = ttcCible / 1.20;
-  var remiseHTCalc = currentHT - htCible;
-  if(remiseHTCalc <= 0){ calcEl.textContent='⚠️ Montant supérieur au total'; return; }
-  var pct = Math.round((remiseHTCalc / currentHT) * 10000) / 100;
-  var remiseTTC = Math.round(remiseHTCalc * 1.20 * 100) / 100;
-  calcEl.textContent = '→ Remise de ' + pct.toFixed(2).replace('.',',') + '% soit ' + remiseTTC.toFixed(2).replace('.',',') + ' € TTC';
+  if(!calcEl || !valEl) return;
+  var val2 = parseFloat(valEl.value);
+  if(isNaN(val2) || val2 <= 0){ calcEl.textContent=''; return; }
+  // Lire le total HT depuis le DOM (toujours à jour, évite les problèmes de scope)
+  var totHTEl = document.getElementById('tot-ht');
+  var totTTCEl = document.getElementById('tot-ttc');
+  var currentHT2 = totHTEl ? parseFloat(totHTEl.textContent.replace(/\s/g,'').replace(',','.').replace('€','')) : 0;
+  var ttcTotal = totTTCEl ? parseFloat(totTTCEl.textContent.replace(/\s/g,'').replace(',','.').replace('€','')) : Math.round(currentHT2 * 1.20 * 100) / 100;
+  if(currentHT2 <= 0){ calcEl.textContent='⚠️ Ajoutez des produits avant d\'appliquer une remise.'; return; }
+  if(val2 <= 100){
+    var remTTC = Math.round(currentHT2 * val2 / 100 * 1.20 * 100) / 100;
+    var finalTTC = Math.round((ttcTotal - remTTC) * 100) / 100;
+    calcEl.textContent = '→ Remise de ' + remTTC.toFixed(2).replace('.',',') + ' € TTC · Total final : ' + finalTTC.toFixed(2).replace('.',',') + ' € TTC';
+  } else {
+    if(val2 >= ttcTotal){ calcEl.textContent = '⚠️ Supérieur au total TTC actuel (' + ttcTotal.toFixed(2).replace('.',',') + ' €)'; return; }
+    var remTTC2 = Math.round((ttcTotal - val2) * 100) / 100;
+    var htCible2 = Math.round(val2 / 1.20 * 100) / 100;
+    var remHT2 = Math.round((currentHT2 - htCible2) * 100) / 100;
+    var pct2 = Math.round(remHT2 / currentHT2 * 10000) / 100;
+    calcEl.textContent = '→ Remise de ' + pct2.toFixed(2).replace('.',',') + '% (' + remTTC2.toFixed(2).replace('.',',') + ' € TTC) · Total exact : ' + val2.toFixed(2).replace('.',',') + ' € TTC';
+  }
 }
 window.toggleRpMode = toggleRpMode;
 window.calcRpPct = calcRpPct;
@@ -2907,40 +2897,33 @@ function addFromSelect(){
   const val = sel.value; if(!val) return;
   const parts = val.split('|');
   if(parts[0] === '__remise_partenaire__'){
-    var modeEl = document.querySelector('input[name="rp-mode"]:checked');
-    var mode = modeEl ? modeEl.value : 'pct';
-    var currentHT = fac_lines.reduce(function(a,l){ return a + l.qty*l.pu; }, 0);
-    var pctSaisi = 0;
-    if(mode === 'pct'){
-      pctSaisi = parseFloat(document.getElementById('remise-partenaire-pct').value);
-      if(isNaN(pctSaisi) || pctSaisi <= 0){ alert('Saisissez un pourcentage.'); return; }
+    var valElrp2 = document.getElementById('remise-partenaire-val');
+    var valrp2 = valElrp2 ? parseFloat(valElrp2.value) : 0;
+    if(isNaN(valrp2) || valrp2 <= 0){ alert('Saisissez un pourcentage (ex: 10) ou un montant TTC final (ex: 600).'); return; }
+    var totHTElrp2 = document.getElementById('tot-ht');
+    var totTTCElrp2 = document.getElementById('tot-ttc');
+    var currentHTrp2 = totHTElrp2 ? parseFloat(totHTElrp2.textContent.replace(/\s/g,'').replace(',','.').replace('€','')) : 0;
+    var ttcTotRp2 = totTTCElrp2 ? parseFloat(totTTCElrp2.textContent.replace(/\s/g,'').replace(',','.').replace('€','')) : Math.round(currentHTrp2*1.20*100)/100;
+    if(currentHTrp2 <= 0){ alert('Ajoutez des produits avant d\'appliquer une remise.'); return; }
+    var remiseHTrp2 = 0; var pctLabelrp2 = '';
+    if(valrp2 <= 100){
+      remiseHTrp2 = -Math.round(currentHTrp2 * valrp2 / 100 * 100) / 100;
+      pctLabelrp2 = String(valrp2) + '%|' + parseFloat(valrp2).toFixed(10);
     } else {
-      var ttcCible = parseFloat(document.getElementById('remise-partenaire-ttc').value);
-      if(isNaN(ttcCible) || ttcCible <= 0){ alert('Saisissez un montant TTC cible.'); return; }
-      var htCible = Math.round((ttcCible / 1.20) * 100) / 100;
-      var remiseHTExacte = Math.round((htCible - currentHT) * 100) / 100; // négatif
-      if(remiseHTExacte >= 0){ alert('Le montant TTC cible est supérieur ou égal au total actuel.'); return; }
-      var pctInfo = Math.round((-remiseHTExacte / currentHT) * 10000) / 100;
-      var pctLabel2 = pctInfo.toFixed(2).replace('.',',');
-      addLine('Remise Partenaires ' + pctLabel2 + '%', 1, remiseHTExacte);
-      var wrap2 = document.getElementById('remise-partenaire-wrap');
-      if(wrap2){ wrap2.style.display = 'none'; }
-      var inpTtc2 = document.getElementById('remise-partenaire-ttc'); if(inpTtc2) inpTtc2.value='';
-      var calcEl2 = document.getElementById('rp-pct-calc'); if(calcEl2) calcEl2.textContent='';
-      var sel3 = document.getElementById('product-select'); if(sel3) sel3.value='';
-      var lbl3 = document.getElementById('custom-select-label'); if(lbl3) lbl3.textContent='— Choisir un produit —';
-      return;
+      if(valrp2 >= ttcTotRp2){ alert('Le montant TTC saisi (' + valrp2 + ' €) est supérieur ou égal au total TTC actuel (' + ttcTotRp2 + ' €).'); return; }
+      var htCiblerp2 = Math.round(valrp2 / 1.20 * 100) / 100;
+      remiseHTrp2 = Math.round((htCiblerp2 - currentHTrp2) * 100) / 100;
+      var pctInforp2 = (-remiseHTrp2 / currentHTrp2) * 100;
+      var pctAffiche2 = pctInforp2.toFixed(2).replace('.',',');
+      pctLabelrp2 = pctAffiche2 + '%|' + pctInforp2.toFixed(10);
     }
-    var remiseHT = -(currentHT * pctSaisi / 100);
-    var pctLabel = pctSaisi % 1 === 0 ? String(pctSaisi) : pctSaisi.toFixed(2).replace('.',',');
-    addLine('Remise Partenaires ' + pctLabel + '%', 1, parseFloat(remiseHT.toFixed(2)));
-    var wrap = document.getElementById('remise-partenaire-wrap');
-    if(wrap){ wrap.style.display = 'none'; }
-    var inpPct = document.getElementById('remise-partenaire-pct'); if(inpPct) inpPct.value='';
-    var inpTtc = document.getElementById('remise-partenaire-ttc'); if(inpTtc) inpTtc.value='';
-    var calcEl = document.getElementById('rp-pct-calc'); if(calcEl) calcEl.textContent='';
-    var sel2 = document.getElementById('product-select'); if(sel2) sel2.value='';
-    var lbl2 = document.getElementById('custom-select-label'); if(lbl2) lbl2.textContent='— Choisir un produit —';
+    addLine('Remise Partenaires ' + pctLabelrp2, 1, remiseHTrp2);
+    var wraprp2 = document.getElementById('remise-partenaire-wrap');
+    if(wraprp2){ wraprp2.style.display = 'none'; }
+    if(valElrp2) valElrp2.value = '';
+    var calcElrp2 = document.getElementById('rp-pct-calc'); if(calcElrp2) calcElrp2.textContent='';
+    var sel2rp2 = document.getElementById('product-select'); if(sel2rp2) sel2rp2.value='';
+    var lbl2rp2 = document.getElementById('custom-select-label'); if(lbl2rp2) lbl2rp2.textContent='— Choisir un produit —';
     return;
   } else if(parts[0] === '__remise__'){
     const pct = parseFloat(parts[1]) || 5;
@@ -2990,7 +2973,7 @@ function renderLines(){
   if(infoBlock) infoBlock.style.display = hasFormation ? 'block' : 'none';
   c.innerHTML = fac_lines.map((l,i) => `
     <div class="line-row">
-      <input value="${l.desc}" oninput="updateFacLine(${i},'desc',this.value)" placeholder="Description">
+      <input value="${l.desc.split('|')[0]}" oninput="updateFacLine(${i},'desc',this.value)" placeholder="Description">
       <input type="number" value="${l.qty}" min="1" step="1" oninput="updateFacLine(${i},'qty',parseFloat(this.value)||1)">
       <input type="number" value="${l.pu}" min="0" step="0.01" oninput="updateFacLine(${i},'pu',parseFloat(this.value)||0)">
       <button class="del-btn" onclick="removeLine(${i})">×</button>
@@ -3010,6 +2993,17 @@ function fmtPU(n){ return n.toLocaleString('fr-FR',{minimumFractionDigits:2,maxi
 
 // ── Render preview ──────────────────────────────────────────────────────
 function render(){
+  // Recalcul automatique Remise Partenaires
+  const rpIdx2 = fac_lines.findIndex(l => l.desc && l.desc.startsWith('Remise Partenaires'));
+  if(rpIdx2 !== -1){
+    const pctParts2 = fac_lines[rpIdx2].desc.split('|');
+    const pctStr2 = pctParts2.length > 1 ? pctParts2[1] : (fac_lines[rpIdx2].desc.match(/([\d,.]+)%/) || ['','0'])[1];
+    const pct2 = parseFloat(pctStr2.replace(',','.'));
+    if(pct2 > 0){
+      const sousTotal2 = fac_lines.reduce((a,l,i) => i===rpIdx2 ? a : a + l.qty*l.pu, 0);
+      fac_lines[rpIdx2].pu = -Math.round(sousTotal2 * pct2 / 100 * 100) / 100;
+    }
+  }
   if(!document.getElementById('tot-ht')) return;
   const {ht, tva, ttc} = calcTotals();
   document.getElementById('tot-ht').textContent = fmt(ht);
@@ -3039,7 +3033,7 @@ function render(){
 
   const lignesHTML = fac_lines.map(l => `
     <tr>
-      <td>${l.desc}</td>
+      <td>${l.desc.split('|')[0]}</td>
       <td>${l.qty}</td>
       <td>${fmtPU(l.pu)} €</td>
       <td>${fmt(l.qty*l.pu)}</td>
