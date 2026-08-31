@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-08-31T09:50:25.373Z",
+  "timestamp": "2026-08-31T10:21:07.345Z",
   "device": "Macintosh; Intel Mac OS X 10_15_7",
   "data": {
     "nh_doc_22405": "{\"docType\":\"FACTURE\",\"num\":\"22405\",\"date\":\"2026-05-26\",\"validity\":\"2026-06-28\",\"projet\":\"\",\"desc\":\"\",\"cliNom\":\"OneTrust SAS\",\"cliAdr1\":\"24 rue Mogador\",\"cliAdr2\":\"\",\"cliCp\":\"75009\",\"cliVille\":\"PARIS\",\"cliEmail\":\"\",\"note\":\"Merci de votre confiance,\\nNous serons heureux de vous accueillir dans notre centre de formations !\\nL'équipe Nautic Holidays.\",\"timbreOn\":false,\"timbreVal\":\"78\",\"lines\":[{\"desc\":\"Séminaire / Évènement\",\"qty\":1,\"pu\":333.33},{\"desc\":\"Remise 10%\",\"qty\":1,\"pu\":-33.33}],\"savedAt\":\"2026-05-29T22:34:31.026Z\"}",
