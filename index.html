@@ -314,11 +314,11 @@ body{font-family:'Dosis',sans-serif;background:var(--bg);color:var(--tp);font-si
 <div class="pg" id="p-gl">
 <div class="kg">
   <div class="kc kao"><div class="kl">CA réel 2025</div><div class="kv">152 367 €</div><div class="ks">Comptable 126 224 € · TPE+WooC+VIR</div><span class="kd pos">+86% vs 2024</span></div>
-  <div class="kc kaa"><div class="kl">CA réalisé 2026 (5 mois)</div><div class="kv">47 659 €</div><div class="ks">Objectif annuel 169 550 €</div><span class="kd wn">28% obj. / 42% temps</span></div>
+  <div class="kc kaa"><div class="kl" id="gl-ca26-lbl">CA réalisé 2026 (5 mois)</div><div class="kv" id="gl-ca26-val">47 659 €</div><div class="ks" id="gl-ca26-sub">Objectif annuel 169 550 €</div><span class="kd wn" id="gl-ca26-badge">28% obj. / 42% temps</span></div>
   <div class="kc kac"><div class="kl">Résultat 2025</div><div class="kv">−9 165 €</div><div class="ks">EBE +3 621 € · CAF −63 € · Solvab. 74%</div><span class="kd wn">Redressement confirmé</span></div>
-  <div class="kc kag"><div class="kl">Résultat cible 2026</div><div class="kv">+30 582 €</div><div class="ks">1er bénéfice depuis 2023</div><span class="kd pos">Objectif atteignable</span></div>
+  <div class="kc kag"><div class="kl">Résultat cible 2026</div><div class="kv" id="gl-result26-val">+30 582 €</div><div class="ks">1er bénéfice depuis 2023</div><span class="kd pos" id="gl-result26-badge">Objectif atteignable</span></div>
 </div>
-<div class="al warn"><span>⚠</span><div>Retard <strong>−9 885 €</strong> sur 5 mois 2026. Solvabilité court terme 2025 : <strong>74,72%</strong> (dettes hors emprunt 34 080 € > actif circulant 25 465 €). Délai fournisseurs 70 jours. Juillet–août = 26% du CA annuel — décisifs.</div></div>
+<div class="al warn" id="gl-alert"><span>⚠</span><div id="gl-alert-body">Retard <strong>−9 885 €</strong> sur 5 mois 2026. Solvabilité court terme 2025 : <strong>74,72%</strong> (dettes hors emprunt 34 080 € &gt; actif circulant 25 465 €). Délai fournisseurs 70 jours. Juillet–août = 26% du CA annuel — décisifs.</div></div>
 <div class="g2 sec">
   <div class="card"><div class="sh"><div class="st">CA & résultat 2022–2026</div></div><div class="cw" style="height:230px"><canvas id="c0"></canvas></div></div>
   <div class="card"><div class="sh"><div class="st">EBE & CAF 2022–2025</div></div><div class="cw" style="height:230px"><canvas id="c1"></canvas></div></div>
@@ -803,13 +803,7 @@ body{font-family:'Dosis',sans-serif;background:var(--bg);color:var(--tp);font-si
 
 <!-- OBJECTIFS -->
 <div class="pg" id="p-ob">
-<div class="kg">
-  <div class="kc kao"><div class="kl">App NH · 100 abonnés</div><div class="kv">+17 880 €</div><div class="ks">14,90€/mois · 4 086 contacts</div><span class="kd pos">Récurrent mensuel</span></div>
-  <div class="kc kag"><div class="kl">Économie FREE</div><div class="kv">+1 776 €</div><div class="ks">148€/mois dès juin 2026</div><span class="kd pos">Immédiat</span></div>
-  <div class="kc kaa"><div class="kl">Covering + Panneaux pub</div><div class="kv">4 500 €</div><div class="ks">Véhicule 3 000 € · Panneaux 1 500 €</div><span class="kd wn">Charge communication</span></div>
-  <div class="kc kaa"><div class="kl">Vêtements NH</div><div class="kv">5 796 €</div><div class="ks">Invest. · si tréso positive</div><span class="kd wn">Conditionnel</span></div>
-  <div class="kc kao"><div class="kl">BPJEPS 2027</div><div class="kv">+41k€ net</div><div class="ks">80k€ TTC brut + prestataires</div><span class="kd pos">Horizon 2027</span></div>
-</div>
+<div id="ob-projets" class="kg"></div>
 <div class="g2 sec">
 <div class="card"><div class="sh"><div class="st">Feuille de route 2026–2029</div></div>
 <div class="tl">
@@ -1982,6 +1976,36 @@ function rnd(id){
 }
 
 function rGl(){
+  // ── KPIs 2026 dynamiques ─────────────────────────────────────
+  const _mFd=D26.real.filter(v=>v!==null).length;
+  const _tRd=D26.real.reduce((a,v)=>a+(v||0),0);
+  const _tPd=D26.prev.reduce((a,v)=>a+v,0);
+  const _pAd=D26.prev.slice(0,_mFd).reduce((a,v)=>a+v,0);
+  const _ecart=Math.round(_tRd-_pAd);
+  const _pctObj=_tPd?Math.round(_tRd/_tPd*100):0;
+  const _pctT=Math.round(_mFd/12*100);
+  const _mNoms=['Jan','Fév','Mar','Avr','Mai','Jun','Jul','Aoû','Sep','Oct','Nov','Déc'];
+  const _derM=_mFd>0?_mNoms[_mFd-1]:'—';
+  const _enAvance=_ecart>=0;
+
+  const _l=document.getElementById('gl-ca26-lbl');
+  const _v=document.getElementById('gl-ca26-val');
+  const _s=document.getElementById('gl-ca26-sub');
+  const _b=document.getElementById('gl-ca26-badge');
+  if(_l) _l.textContent='CA réalisé 2026 ('+_mFd+' mois)';
+  if(_v) _v.textContent=Math.round(_tRd).toLocaleString('fr-FR')+' €';
+  if(_s) _s.textContent='Objectif annuel '+Math.round(_tPd).toLocaleString('fr-FR')+' €';
+  if(_b){_b.textContent=_pctObj+'% obj. / '+_pctT+'% temps';_b.className='kd '+(_enAvance?'pos':'wn');}
+
+  const _al=document.getElementById('gl-alert');
+  const _ab=document.getElementById('gl-alert-body');
+  if(_al) _al.className='al '+(_enAvance?'good':'warn');
+  if(_ab){
+    const _eAbs=Math.abs(_ecart).toLocaleString('fr-FR');
+    const _label=_enAvance?'Avance <strong>+'+_eAbs+' €</strong>':'Retard <strong>−'+_eAbs+' €</strong>';
+    _ab.innerHTML=_label+' sur '+_mFd+' mois 2026 (Jan–'+_derM+'). Solvabilité court terme 2025 : <strong>74,72%</strong> (dettes hors emprunt 34 080 € &gt; actif circulant 25 465 €). Délai fournisseurs 70 jours. Juillet–août = 26% du CA annuel — décisifs.';
+  }
+
   mk('c0','bar',{
     labels:['2022\n(20 mois)','2023','2024','2025','2026p'],
     datasets:[
@@ -2040,7 +2064,7 @@ function rS26(){
     const ecartTxt=ecart>=0
       ? 'Tu es <strong>en avance de '+ecartAbs.toLocaleString('fr-FR')+' €</strong> sur ta trajectoire saisonnalisée — bonne dynamique.'
       : 'L\'écart à rattraper est de <strong>'+ecartAbs.toLocaleString('fr-FR')+' €</strong> — récupérable en haute saison.';
-    html+='<div class="al good"><span>✅</span><div><strong>Lecture saisonnalisée :</strong> Jan–'+lastMoisNom+' ne représentent que <strong>'+poidsP.toFixed(1)+'% du CA annuel</strong> dans ton prévisionnel (pas '+tempsPct+'%). La performance réelle sur la période est de <strong>'+perfP.toFixed(0)+'%</strong>, pas '+((tRd/tPd)*100).toFixed(0)+'%. '+ecartTxt+'</div></div>';
+    html+='<div class="al good"><span>✅</span><div><strong>Lecture saisonnalisée :</strong> Jan–'+lastMoisNom+' représentent <strong>'+poidsP.toFixed(1)+'% du CA annuel prévisionnel</strong> (et non '+tempsPct+'% du temps calendaire). Sur cette base saisonnière, tu as réalisé <strong>'+perfP.toFixed(0)+'%</strong> de ton objectif de période. '+ecartTxt+'</div></div>';
     // Alerte 2 : dernier mois saisi
     const lastIdx=mFd-1;
     const lastReal=D26.real[lastIdx]; const lastPrev=D26.prev[lastIdx];
@@ -2307,11 +2331,168 @@ function rEm(){
   renderEmTable();
 }
 
+// ── Projets dynamiques ─────────────────────────────────────────────────────
+const BASE_RESULT_2026=30582;
+const PROJ_DEFAULTS=[
+  {id:'free',     label:'Économie FREE',        impact:1776,  note:'148€/mois depuis juin 2026',                                type:'e',year:2026,done:true},
+  {id:'tpe',      label:'Changement TPE',        impact:0,     note:'Réduction commissions vs Zettle depuis le 01/09/2026 · cliquer sur le montant pour saisir le gain estimé',type:'e',year:2026,done:true},
+  {id:'app-nh',   label:'App NH · 100 abonnés',  impact:17880, note:'14,90€/mois · 4 086 contacts',                           type:'r',year:2026,done:false},
+  {id:'covering', label:'Covering + Panneaux',   impact:-4500, note:'Véhicule 3 000 € · Panneaux 1 500 €',                    type:'c',year:2026,done:false},
+  {id:'vetements',label:'Vêtements NH',           impact:-5796, note:'Invest. · si tréso positive',                            type:'c',year:2026,done:false},
+  {id:'bpjeps',   label:'BPJEPS 2027',            impact:41000, note:'80k€ TTC brut + prestataires',                           type:'r',year:2027,done:false}
+];
+function loadProjets(){
+  try{const d=localStorage.getItem('nh_projets_v2');return d?JSON.parse(d):JSON.parse(JSON.stringify(PROJ_DEFAULTS));}
+  catch(e){return JSON.parse(JSON.stringify(PROJ_DEFAULTS));}
+}
+function saveProjets(arr){try{localStorage.setItem('nh_projets_v2',JSON.stringify(arr));}catch(e){}}
+function getImpact2026(arr){return (arr||loadProjets()).filter(p=>p.done&&p.year===2026).reduce((s,p)=>s+p.impact,0);}
+function updateGlResult(arr){
+  const impact=getImpact2026(arr);
+  const result=Math.round(BASE_RESULT_2026+impact);
+  const _v=document.getElementById('gl-result26-val');
+  const _b=document.getElementById('gl-result26-badge');
+  if(_v)_v.textContent=(result>=0?'+':'')+result.toLocaleString('fr-FR')+' €';
+  if(_b){
+    _b.className='kd '+(result>=0?'pos':'wn');
+    _b.textContent=result>0?'Objectif atteignable':result===0?'À l\'équilibre':'Déficit projeté';
+  }
+}
+function toggleProjet(id){
+  const arr=loadProjets();const p=arr.find(x=>x.id===id);
+  if(p){p.done=!p.done;saveProjets(arr);rOb();}
+}
+function deleteProjet(id){
+  let arr=loadProjets();arr=arr.filter(x=>x.id!==id);
+  saveProjets(arr);rOb();
+}
+function editProjetImpact(id){
+  const arr=loadProjets();const p=arr.find(x=>x.id===id);if(!p)return;
+  const old=document.getElementById('epi-modal');if(old)old.remove();
+  const m=document.createElement('div');
+  m.id='epi-modal';
+  m.style.cssText='position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,.5);z-index:9999;display:flex;align-items:center;justify-content:center';
+  m.innerHTML=`<div style="background:var(--bg2);border:1px solid var(--bd);border-radius:12px;padding:24px;min-width:280px;max-width:360px;box-shadow:0 8px 32px rgba(0,0,0,.3)">
+    <div style="font-weight:600;font-size:14px;margin-bottom:4px;color:var(--fg)">${p.label}</div>
+    <div style="font-size:12px;color:var(--tm);margin-bottom:16px">${p.note||''}</div>
+    <label style="font-size:11px;color:var(--tm);display:block;margin-bottom:6px">Impact sur le résultat ${p.year} (€)</label>
+    <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px">
+      <input id="epi-val" type="number" value="${p.impact}" style="flex:1;background:var(--bg);border:2px solid var(--a);border-radius:8px;padding:10px 12px;color:var(--fg);font-size:16px;font-weight:700">
+      <span style="color:var(--tm);font-size:14px">€</span>
+    </div>
+    <div style="font-size:11px;color:var(--tm);margin-bottom:16px">Positif = gain · Négatif = charge/invest.</div>
+    <div style="display:flex;gap:8px">
+      <button onclick="saveEpiModal('${id}')" style="flex:1;background:var(--a);color:#fff;border:none;border-radius:8px;padding:10px;cursor:pointer;font-size:14px;font-weight:600">Enregistrer</button>
+      <button onclick="document.getElementById('epi-modal').remove()" style="background:none;border:1px solid var(--bd);color:var(--tm);border-radius:8px;padding:10px 14px;cursor:pointer;font-size:13px">Annuler</button>
+    </div>
+  </div>`;
+  document.body.appendChild(m);
+  m.addEventListener('click',function(e){if(e.target===m)m.remove();});
+  setTimeout(()=>{const i=document.getElementById('epi-val');if(i){i.focus();i.select();}},50);
+}
+function saveEpiModal(id){
+  const inp=document.getElementById('epi-val');if(!inp)return;
+  const n=parseFloat(String(inp.value).replace(',','.'));
+  if(isNaN(n))return;
+  const arr=loadProjets();const p=arr.find(x=>x.id===id);
+  if(p){p.impact=n;saveProjets(arr);}
+  const m=document.getElementById('epi-modal');if(m)m.remove();
+  rOb();
+}
+function toggleObForm(){
+  const f=document.getElementById('ob-form');
+  if(f)f.style.display=f.style.display==='none'?'block':'none';
+}
+function submitProjet(){
+  const lb=(document.getElementById('ob-f-label')||{}).value||'';
+  if(!lb.trim())return;
+  const raw=(document.getElementById('ob-f-impact')||{}).value||'0';
+  const imp=parseFloat(String(raw).replace(',','.'));
+  const nt=(document.getElementById('ob-f-note')||{}).value||'';
+  const tp=(document.getElementById('ob-f-type')||{}).value||'r';
+  const yr=parseInt((document.getElementById('ob-f-year')||{}).value||'2026');
+  const arr=loadProjets();
+  arr.push({id:'p'+Date.now(),label:lb.trim(),impact:isNaN(imp)?0:imp,note:nt.trim(),type:tp,year:yr,done:false});
+  saveProjets(arr);
+  const f=document.getElementById('ob-form');if(f)f.style.display='none';
+  ['ob-f-label','ob-f-impact','ob-f-note'].forEach(i=>{const el=document.getElementById(i);if(el)el.value='';});
+  rOb();
+}
+
 function rOb(){
+  const arr=loadProjets();
+  // ── Résultat cible Vue globale ──
+  updateGlResult(arr);
+  // ── Cartes projets ──
+  const el=document.getElementById('ob-projets');
+  if(el){
+    const kls={r:'kao',e:'kag',c:'kaa'};
+    el.innerHTML=arr.map(p=>{
+      const kl=kls[p.type]||'kaa';
+      const sign=p.impact>0?'+':p.impact<0?'':'';
+      const absImp=Math.round(Math.abs(p.impact));
+      const impFmt=(p.impact>=0?'+':'−')+absImp.toLocaleString('fr-FR')+' €';
+      const yrTag=p.year!==2026?` <small style="color:var(--tm);font-size:10px">(${p.year})</small>`:'';
+      return `<div class="kc ${kl}" style="position:relative">
+  <button onclick="deleteProjet('${p.id}')" title="Supprimer" style="position:absolute;top:6px;right:6px;background:none;border:1px solid var(--bd);color:var(--tm);border-radius:4px;padding:1px 6px;cursor:pointer;font-size:11px;line-height:1.4">✕</button>
+  <div class="kl">${p.label}${yrTag}</div>
+  <div class="kv" onclick="editProjetImpact('${p.id}')" style="cursor:pointer" title="Cliquer pour modifier le montant">${impFmt}</div>
+  <div class="ks">${p.note||'—'}</div>
+  <label style="display:flex;align-items:center;gap:6px;cursor:pointer;margin-top:8px;font-size:12px">
+    <input type="checkbox" ${p.done?'checked':''} onchange="toggleProjet('${p.id}')" style="width:14px;height:14px;cursor:pointer">
+    <span class="${p.done?'pos':'wn'}">${p.done?'✅ Réalisé':'⏳ À faire'}</span>
+  </label>
+</div>`;
+    }).join('')+
+    `<div onclick="toggleObForm()" style="border:2px dashed var(--bd);border-radius:10px;cursor:pointer;display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:90px;gap:6px;padding:12px;transition:border-color .2s" onmouseover="this.style.borderColor='var(--a)'" onmouseout="this.style.borderColor='var(--bd)'">
+  <div style="font-size:24px;color:var(--tm)">＋</div>
+  <div style="font-size:12px;color:var(--tm)">Ajouter un projet</div>
+</div>`;
+  }
+  // ── Formulaire (singleton — inséré une seule fois) ──
+  const pg=document.getElementById('p-ob');
+  if(pg&&!document.getElementById('ob-form')){
+    const fd=document.createElement('div');
+    fd.id='ob-form';
+    fd.style.cssText='display:none;background:var(--bg2);border:1px solid var(--bd);border-radius:10px;padding:16px;margin:14px 0;max-width:540px';
+    fd.innerHTML=`<div style="font-weight:600;font-size:13px;margin-bottom:12px;color:var(--fg)">Nouveau projet / action</div>
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:10px">
+  <div><label style="font-size:11px;color:var(--tm);display:block;margin-bottom:3px">Nom du projet</label><input id="ob-f-label" placeholder="ex: Sponsoring club surf…" style="width:100%;box-sizing:border-box;background:var(--bg);border:1px solid var(--bd);border-radius:6px;padding:7px 10px;color:var(--fg);font-size:13px"></div>
+  <div><label style="font-size:11px;color:var(--tm);display:block;margin-bottom:3px">Impact résultat (€)</label><input id="ob-f-impact" type="number" placeholder="ex: 3000 ou -2000" style="width:100%;box-sizing:border-box;background:var(--bg);border:1px solid var(--bd);border-radius:6px;padding:7px 10px;color:var(--fg);font-size:13px"></div>
+  <div><label style="font-size:11px;color:var(--tm);display:block;margin-bottom:3px">Type</label><select id="ob-f-type" style="width:100%;box-sizing:border-box;background:var(--bg);border:1px solid var(--bd);border-radius:6px;padding:7px 10px;color:var(--fg);font-size:13px"><option value="r">📈 Revenu</option><option value="e">💡 Économie</option><option value="c">📦 Charge / Invest.</option></select></div>
+  <div><label style="font-size:11px;color:var(--tm);display:block;margin-bottom:3px">Année</label><select id="ob-f-year" style="width:100%;box-sizing:border-box;background:var(--bg);border:1px solid var(--bd);border-radius:6px;padding:7px 10px;color:var(--fg);font-size:13px"><option value="2026">2026</option><option value="2027">2027</option></select></div>
+</div>
+<div style="margin-bottom:12px"><label style="font-size:11px;color:var(--tm);display:block;margin-bottom:3px">Note / détail</label><input id="ob-f-note" placeholder="ex: Réduction commissions TPE depuis sep. 2026" style="width:100%;box-sizing:border-box;background:var(--bg);border:1px solid var(--bd);border-radius:6px;padding:7px 10px;color:var(--fg);font-size:13px"></div>
+<div style="display:flex;gap:8px">
+  <button onclick="submitProjet()" style="background:var(--a);color:#fff;border:none;border-radius:6px;padding:8px 18px;cursor:pointer;font-size:13px;font-weight:600">Ajouter</button>
+  <button onclick="toggleObForm()" style="background:none;border:1px solid var(--bd);color:var(--tm);border-radius:6px;padding:8px 14px;cursor:pointer;font-size:13px">Annuler</button>
+</div>`;
+    const secDiv=pg.querySelector('.g2.sec');
+    if(secDiv)pg.insertBefore(fd,secDiv);else pg.appendChild(fd);
+  }
+  // ── Chart c9 dynamique ──
+  const done26=arr.filter(p=>p.done&&p.year===2026);
+  const notDone26=arr.filter(p=>!p.done&&p.year===2026);
+  const lbs=['Base 2026'];
+  const dt=[BASE_RESULT_2026];
+  const cl=['rgba(20,121,173,.7)'];
+  let cum=BASE_RESULT_2026;
+  done26.forEach(p=>{
+    lbs.push(p.label);
+    cum+=Math.round(p.impact);
+    dt.push(cum);
+    cl.push(p.impact>=0?'rgba(31,159,183,.8)':'rgba(231,76,60,.7)');
+  });
+  notDone26.forEach(p=>{
+    lbs.push(p.label+' (prévu)');
+    cum+=Math.round(p.impact);
+    dt.push(cum);
+    cl.push(p.impact>=0?'rgba(101,191,175,.4)':'rgba(231,76,60,.35)');
+  });
   mk('c9','bar',{
-    labels:['Base 2026','+ App NH','+ FREE','Vision BPJEPS 2027'],
-    datasets:[{label:'Résultat cumulé',data:[30582,48462,50238,91238],backgroundColor:['rgba(20,121,173,.7)','rgba(31,159,183,.75)','rgba(101,191,175,.8)','rgba(20,121,173,.85)'],borderRadius:5}]
-  },{scales:{x:{grid:{display:false},ticks:{color:C.gr,font:{size:11}}},y:{ticks:{color:C.gr,callback:v=>v/1000+'k€'},grid:{color:C.bd}}}});
+    labels:lbs,
+    datasets:[{label:'Résultat cumulé',data:dt,backgroundColor:cl,borderRadius:5}]
+  },{scales:{x:{grid:{display:false},ticks:{color:C.gr,font:{size:10},maxRotation:25}},y:{ticks:{color:C.gr,callback:v=>v/1000+'k€'},grid:{color:C.bd}}}});
 }
 
 const SC={
@@ -3473,6 +3654,12 @@ setTimeout(()=>{buildSaisieGrid();}, 100);
   window.validerSaisie = validerSaisie;
   window.highlightInput = highlightInput;
   window.sim = sim;
+  window.toggleProjet = toggleProjet;
+  window.deleteProjet = deleteProjet;
+  window.editProjetImpact = editProjetImpact;
+  window.saveEpiModal = saveEpiModal;
+  window.toggleObForm = toggleObForm;
+  window.submitProjet = submitProjet;
 })();
 
 // ── GitHub Sync ─────────────────────────────────────────────────────────
