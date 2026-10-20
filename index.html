@@ -228,8 +228,8 @@ body{font-family:'Dosis',sans-serif;background:var(--bg);color:var(--tp);font-si
 .fh-table tbody td:last-child{text-align:right;font-family:'DM Mono',monospace;font-size:12px;font-weight:600}
 .fh-table .note-row td{font-style:italic;color:#888;font-size:11px;padding:4px 12px;border-bottom:none}
 
-.fh-totaux{display:flex;justify-content:flex-end;margin-bottom:14px}
-.fh-tot-box{width:260px;border:1px solid #dde4f0;border-radius:8px;overflow:hidden}
+.fh-totaux{text-align:right;margin-bottom:14px}
+.fh-tot-box{display:inline-block;width:260px;border:1px solid #dde4f0;border-radius:8px;overflow:hidden;text-align:left;vertical-align:top}
 .fh-tot-row{display:flex;justify-content:space-between;padding:7px 14px;font-size:12.5px;border-bottom:1px solid #eef2f7}
 .fh-tot-row:last-child{border-bottom:none}
 .fh-tot-row.ht{background:#f8fbff}
@@ -871,7 +871,7 @@ body{font-family:'Dosis',sans-serif;background:var(--bg);color:var(--tp);font-si
     <input type="number" id="pm-hauturier" value="15" style="width:100%;padding:6px 9px;border:1px solid var(--bd);border-radius:6px;font-family:'Dosis',sans-serif;font-size:13px"></div>
     <div><label style="font-size:12px;font-weight:500;color:var(--ts);display:block;margin-bottom:3px">Nb CRR radio</label>
     <input type="number" id="pm-crr" value="16" style="width:100%;padding:6px 9px;border:1px solid var(--bd);border-radius:6px;font-family:'Dosis',sans-serif;font-size:13px"></div>
-    <div><label style="font-size:12px;font-weight:500;color:var(--ts);display:block;margin-bottom:3px">Nb inscriptions Code (25€)</label>
+    <div><label style="font-size:12px;font-weight:500;color:var(--ts);display:block;margin-bottom:3px">Nb inscriptions Code (33,33€ HT / 40€ TTC)</label>
     <input type="number" id="pm-code" value="356" style="width:100%;padding:6px 9px;border:1px solid var(--bd);border-radius:6px;font-family:'Dosis',sans-serif;font-size:13px"></div>
     <div><label style="font-size:12px;font-weight:500;color:var(--ts);display:block;margin-bottom:3px">Nb Code supplémentaire (183€)</label>
     <input type="number" id="pm-code-supp" value="10" style="width:100%;padding:6px 9px;border:1px solid var(--bd);border-radius:6px;font-family:'Dosis',sans-serif;font-size:13px"></div>
@@ -990,7 +990,7 @@ body{font-family:'Dosis',sans-serif;background:var(--bg);color:var(--tp);font-si
 <div class="card"><div class="sh"><div class="st">Pricing & rentabilité par produit</div></div>
 <table class="dt"><thead><tr><th>Produit</th><th>Tarif</th><th>Coût marginal est.</th><th>Marge</th><th>Volume est. 2025</th><th>CA estimé</th></tr></thead><tbody>
 <tr><td><strong>Permis Côtier ECO</strong> <span class="badge bgg">⭐ Star</span></td><td class="mono pos">360 €</td><td class="mono">~60 €</td><td class="mono pos">83%</td><td class="mono">~240</td><td class="mono pos">~86 400 €</td></tr>
-<tr><td>Inscription Code</td><td class="mono">30 €</td><td class="mono">~5 €</td><td class="mono pos">83%</td><td class="mono">~350</td><td class="mono">~10 500 €</td></tr>
+<tr><td>Inscription Code</td><td class="mono">40 €</td><td class="mono">~30 €</td><td class="mono">25%</td><td class="mono">~350</td><td class="mono">~14 000 €</td></tr>
 <tr><td>Permis Fluvial</td><td class="mono">~280 €</td><td class="mono">~50 €</td><td class="mono pos">82%</td><td class="mono">~45</td><td class="mono">~12 600 €</td></tr>
 <tr><td>Permis Hauturier</td><td class="mono">~450 €</td><td class="mono">~80 €</td><td class="mono pos">82%</td><td class="mono">~24</td><td class="mono">~10 800 €</td></tr>
 <tr><td>CRR Radio</td><td class="mono">~200 €</td><td class="mono">~35 €</td><td class="mono pos">82%</td><td class="mono">~36</td><td class="mono">~7 200 €</td></tr>
@@ -1074,12 +1074,11 @@ body{font-family:'Dosis',sans-serif;background:var(--bg);color:var(--tp);font-si
   <div class="section">
     <div class="section-title">Client</div>
     <div class="fld"><label>Nom / Société</label><input type="text" id="cli-nom" placeholder="" oninput="render()"></div>
-    <div class="fld" style="position:relative">
+    <div class="fld">
       <label>Adresse ligne 1</label>
-      <input type="text" id="cli-adr1" placeholder="" oninput="render();geocodeAdr()" autocomplete="off">
+      <input type="text" id="cli-adr1" placeholder="Ex : 12 rue de la Mer" oninput="render();geocodeAdr()" onkeydown="geoKeyNav(event)" autocomplete="off">
     </div>
     <div class="fld"><label>Adresse ligne 2 (optionnel)</label><input type="text" id="cli-adr2" placeholder="" oninput="render()"></div>
-    <div id="geo-suggestions" style="display:none;position:absolute;background:#fff;border:1.5px solid var(--oc);border-radius:8px;z-index:999;box-shadow:0 4px 16px rgba(20,121,173,.15);font-size:12px;font-family:'Dosis',sans-serif;max-height:180px;overflow-y:auto;left:14px;right:14px"></div>
     <div class="fld-row">
       <div class="fld"><label>Code postal</label><input type="text" id="cli-cp" placeholder="" oninput="render();geocodeCp()" autocomplete="off"></div>
       <div class="fld"><label>Ville</label><input type="text" id="cli-ville" placeholder="" oninput="render()" style="text-transform:uppercase"></div>
@@ -1123,7 +1122,7 @@ body{font-family:'Dosis',sans-serif;background:var(--bg);color:var(--tp);font-si
           <option value="Perfectionnement — Forfait 5 heures|1|354.17">Perfectionnement 5h — 354,17 € HT (425 € TTC)</option>
         </optgroup>
         <optgroup label="Inscriptions">
-          <option value="Inscription Code|1|25">Inscription Code — 25 € HT (30 € TTC)</option>
+          <option value="Inscription Code|1|33.33333333333333">Inscription Code — 33,33 € HT (40 € TTC)</option>
           <option value="Inscription CRR|1|65">Inscription CRR — 65 € HT (78 € TTC)</option>
         </optgroup>
         <optgroup label="Formations">
@@ -1175,7 +1174,7 @@ body{font-family:'Dosis',sans-serif;background:var(--bg);color:var(--tp);font-si
           <div class="custom-select-option" data-value="Perfectionnement — Forfait 3 heures|1|225">Perfectionnement 3h — 225 € HT (270 € TTC)</div>
           <div class="custom-select-option" data-value="Perfectionnement — Forfait 5 heures|1|354.17">Perfectionnement 5h — 354,17 € HT (425 € TTC)</div>
           <div class="custom-select-group">Inscriptions</div>
-          <div class="custom-select-option" data-value="Inscription Code|1|25">Inscription Code — 25 € HT (30 € TTC)</div>
+          <div class="custom-select-option" data-value="Inscription Code|1|33.33333333333333">Inscription Code — 33,33 € HT (40 € TTC)</div>
           <div class="custom-select-option" data-value="Inscription CRR|1|65">Inscription CRR — 65 € HT (78 € TTC)</div>
           <div class="custom-select-group">Formations</div>
           <div class="custom-select-option" data-value="BPJEPS Motonautique|1|4916.67">BPJEPS Motonautique — 4 916,67 € HT</div>
@@ -1227,6 +1226,18 @@ body{font-family:'Dosis',sans-serif;background:var(--bg);color:var(--tp);font-si
       <input type="number" id="timbre-val" value="78" min="0" step="1" oninput="render()" style="width:60px">
       <span>€ / pers.</span>
     </label>
+  </div>
+
+  <!-- Règlement (facture uniquement) -->
+  <div class="note-timbre" id="paiement-section" style="margin-top:10px">
+    <label style="display:flex;align-items:center;gap:8px;cursor:pointer;font-weight:600">
+      <input type="checkbox" id="paiement-check" onchange="togglePaiementDate();render()">
+      <span>Facture réglée</span>
+    </label>
+    <div id="paiement-date-row" style="display:none;margin-top:8px">
+      <label style="font-size:12px;color:#6aacbd;font-weight:600;display:block;margin-bottom:4px">Date de paiement</label>
+      <input type="date" id="paiement-date" oninput="render()" style="width:100%;padding:6px 8px;border:1.5px solid var(--bd);border-radius:6px;font-family:'Dosis',sans-serif">
+    </div>
   </div>
 
   <!-- Notes -->
@@ -1319,7 +1330,20 @@ function setType(t){
   document.getElementById('btn-facture').classList.toggle('active', t==='FACTURE');
   document.getElementById('btn-devis').classList.toggle('active', t==='DEVIS');
   document.getElementById('validity-field').style.display = t==='DEVIS'?'block':'none';
+  var ps = document.getElementById('paiement-section');
+  if(ps) ps.style.display = t==='FACTURE'?'block':'none';
   render();
+}
+
+function togglePaiementDate(){
+  var checked = document.getElementById('paiement-check') && document.getElementById('paiement-check').checked;
+  var row = document.getElementById('paiement-date-row');
+  if(row) row.style.display = checked ? 'block' : 'none';
+  // Pre-fill today if empty
+  if(checked){
+    var d = document.getElementById('paiement-date');
+    if(d && !d.value) d.value = new Date().toISOString().split('T')[0];
+  }
 }
 
 // ── Lignes ─────────────────────────────────────────────────────────────
@@ -1455,6 +1479,21 @@ function render(){
 
   const timbreNote = ''; // note dans tableau supprimée — bandeau jaune suffit
 
+  // Tampon PAYÉ
+  var _paiementCheck = document.getElementById('paiement-check');
+  var _paiementOn = _paiementCheck && _paiementCheck.checked && docType==='FACTURE';
+  var _paiementDateEl = document.getElementById('paiement-date');
+  var _paiementDateVal = _paiementDateEl ? _paiementDateEl.value : '';
+  var _paiementDateFmt = '';
+  if(_paiementDateVal){ var _pp=_paiementDateVal.split('-'); if(_pp.length===3) _paiementDateFmt=_pp[2]+'/'+_pp[1]+'/'+_pp[0]; }
+  const stampHTML = _paiementOn ? `
+    <div style="text-align:right;margin:10px 24px 0 0">
+      <div style="display:inline-block;border:3.5px solid #c0392b;border-radius:8px;padding:7px 22px;transform:rotate(-8deg);opacity:.82;color:#c0392b">
+        <div style="font-size:28px;font-weight:900;letter-spacing:5px;font-family:'Dosis',sans-serif;text-transform:uppercase;line-height:1">PAYÉ</div>
+        ${_paiementDateFmt ? `<div style="font-size:12px;font-weight:700;letter-spacing:1.5px;margin-top:3px;text-align:center">le ${_paiementDateFmt}</div>` : ''}
+      </div>
+    </div>` : '';
+
   const validityLine = docType==='DEVIS' ? `<div class="fh-validity">Valable jusqu'au : ${validityStr}</div>` : '';
   const echeance = docType==='FACTURE' ? 'Comptant à réception' : 'À confirmer à réception du devis signé';
 
@@ -1527,6 +1566,7 @@ function render(){
           <a href="https://g.page/r/CUejqR6z7BzgEAE/review" style="display:inline-block;margin-top:5px;background:#1479ad;color:#fff;padding:4px 14px;border-radius:20px;font-size:11px;text-decoration:none;font-weight:600">⭐ Déposer mon avis</a>
         </div>
       </div>` : ''}
+      ${stampHTML}
       <div class="fh-footer">
         <div class="slogan">NAUTIC HOLIDAYS — PERMIS DE RÊVER</div>
         ${EMETTEUR.adr1}, ${EMETTEUR.adr2}, ${EMETTEUR.cp} ${EMETTEUR.ville}<br>
@@ -1551,7 +1591,7 @@ function downloadPDF(){
   // Réinitialiser tous les styles du clone pour un rendu propre
   clone.removeAttribute('style');
   clone.removeAttribute('id');
-  clone.style.cssText = 'width:700px;padding:18px 24px;font-family:\'Dosis\',sans-serif;font-size:13px;color:#1a1a2e;background:#fff;box-sizing:border-box';
+  clone.style.cssText = 'width:700px;padding:6px 18px;font-family:\'Dosis\',sans-serif;font-size:13px;color:#1a1a2e;background:#fff;box-sizing:border-box';
 
   // Compacter les sections pour tenir sur 1 page
   var style = document.createElement('style');
@@ -1560,17 +1600,22 @@ function downloadPDF(){
     '.fh-divider{margin:8px 0!important}',
     '.fh-parties{margin-bottom:12px!important}',
     '.fh-table{margin-bottom:8px!important}',
-    '.fh-totaux{margin-bottom:10px!important}',
-    '.fh-conditions{margin-bottom:6px!important;font-size:11px!important}',
-    '.fh-rib{margin-bottom:6px!important;font-size:11px!important}',
-    '.fh-note{padding:8px 12px!important;font-size:11px!important}',
-    '.fh-footer{padding-top:8px!important;font-size:10px!important}',
+    '.fh-header{margin-bottom:8px!important}',
+    '.fh-divider{margin:4px 0!important}',
+    '.fh-parties{margin-bottom:8px!important}',
+    '.fh-table{margin-bottom:4px!important}',
+    '.fh-totaux{margin-bottom:6px!important;text-align:right!important;display:block!important}',
+    '.fh-tot-box{display:inline-block!important;width:220px!important;text-align:left!important}',
+    '.fh-conditions{margin-bottom:4px!important;font-size:10.5px!important}',
+    '.fh-rib{margin-bottom:4px!important;font-size:10.5px!important}',
+    '.fh-note{padding:6px 10px!important;font-size:10.5px!important;margin:8px 0!important}',
+    '.fh-footer{padding-top:6px!important;font-size:10px!important;margin-top:6px!important}',
     '.fh-footer-avis{font-size:10px!important}',
     '.fh-validity{font-size:10px!important}',
-    '.fh-logo img{max-height:48px!important}',
-    '.fh-doc-type{font-size:28px!important}',
-    '.fh-table table th,.fh-table table td{padding:6px 8px!important;font-size:12px!important}',
-    '.fh-totaux{width:220px!important}',
+    '.fh-logo img{max-height:44px!important}',
+    '.fh-doc-type{font-size:26px!important}',
+    '.fh-table table th,.fh-table table td{padding:5px 7px!important;font-size:12px!important}',
+    '.fh-note-timbre{padding:6px 10px!important;font-size:10.5px!important;margin-bottom:4px!important}',
     '.review-btn{padding:3px 10px!important;font-size:10px!important}'
   ].join('');
 
@@ -1751,24 +1796,27 @@ function resetForm(){
 
 // ── Géocodage adresse → CP / Ville (API adresse.data.gouv.fr) ────
 var _geoTimer = null;
+var _geoIdx = -1; // index de suggestion actif (navigation clavier)
 
 function geocodeAdr(){
   clearTimeout(_geoTimer);
+  _geoIdx = -1;
   var el = document.getElementById('cli-adr1');
-  var adr = el ? el.value : '';
-  if(adr.length < 5){ hideSug(); return; }
+  var adr = el ? el.value.trim() : '';
+  if(adr.length < 3){ hideSug(); return; }
   _geoTimer = setTimeout(function(){
-    fetch('https://api-adresse.data.gouv.fr/search/?q=' + encodeURIComponent(adr) + '&limit=6')
+    fetch('https://api-adresse.data.gouv.fr/search/?q=' + encodeURIComponent(adr) + '&limit=7&autocomplete=1')
       .then(function(r){ return r.json(); })
       .then(function(data){ showSug(data.features || []); })
       .catch(function(){});
-  }, 400);
+  }, 300);
 }
 
 function geocodeCp(){
   clearTimeout(_geoTimer);
+  _geoIdx = -1;
   var el = document.getElementById('cli-cp');
-  var cp = el ? el.value : '';
+  var cp = el ? el.value.trim() : '';
   if(cp.length < 4){ return; }
   _geoTimer = setTimeout(function(){
     fetch('https://api-adresse.data.gouv.fr/search/?q=' + encodeURIComponent(cp) + '&type=municipality&limit=6')
@@ -1778,62 +1826,150 @@ function geocodeCp(){
         if(feats.length === 1){
           var p = feats[0].properties;
           document.getElementById('cli-cp').value = p.postcode || cp;
-          document.getElementById('cli-ville').value = p.city || p.label || '';
+          document.getElementById('cli-ville').value = (p.city || p.label || '').toUpperCase();
           if(typeof render === 'function') render();
           hideSug();
         } else if(feats.length > 1){
-          showSug(feats);
+          showSugCp(feats);
         }
       }).catch(function(){});
-  }, 400);
+  }, 350);
 }
 
-function showSug(features){
+function showSugCp(features){
+  // Suggestions pour le champ CP : on les positionne sous le champ CP
+  // En pratique on réutilise le même box, repositionné dynamiquement
   var box = document.getElementById('geo-suggestions');
   if(!box || !features.length){ hideSug(); return; }
   var html = '';
   for(var i=0; i<features.length; i++){
     var p = features[i].properties;
-    var lbl = p.label || '';
-    var cp  = p.postcode || '';
-    var city = p.city || p.label || '';
-    var l2  = lbl.replace(/&/g,'&amp;').replace(/'/g,'&#39;').replace(/"/g,'&quot;');
-    var c2  = city.replace(/&/g,'&amp;').replace(/'/g,'&#39;').replace(/"/g,'&quot;');
-    var cp2 = cp.replace(/'/g,'&#39;');
-    var cpSpan = cp ? '<span style="color:#6aacbd;font-size:11px"> (' + cp + ')</span>' : '';
-    html += '<div style="padding:7px 12px;cursor:pointer;border-bottom:1px solid #eef2f7;font-size:12px;color:#0a2a3f"'
-          + ' onmouseover="this.style.background=\'#e8f4fb\'"'
-          + ' onmouseout="this.style.background=\'\'"'
-          + ' onclick="pickSug(this)"'
-          + ' data-lbl="' + l2 + '"'
-          + ' data-cp="' + cp2 + '"'
-          + ' data-city="' + c2 + '"'
-          + '>' + lbl + cpSpan + '</div>';
+    var lbl = (p.city || p.label || '');
+    var cp2 = p.postcode || '';
+    var l2 = lbl.replace(/&/g,'&amp;').replace(/"/g,'&quot;');
+    var cp3 = cp2.replace(/"/g,'&quot;');
+    html += '<div class="geo-item"'
+          + ' onclick="pickSugCp(this)"'
+          + ' data-cp="' + cp3 + '"'
+          + ' data-city="' + l2 + '">'
+          + '<strong>' + cp2 + '</strong> ' + lbl
+          + '</div>';
+  }
+  // Position fixe par rapport au viewport sous le champ CP
+  var cpEl = document.getElementById('cli-cp');
+  if(cpEl && box){
+    var rect = cpEl.getBoundingClientRect();
+    box.style.top   = (rect.bottom + 4) + 'px';
+    box.style.left  = rect.left + 'px';
+    box.style.width = rect.width + 'px';
+    box.style.right = 'auto';
   }
   box.innerHTML = html;
   box.style.display = 'block';
 }
 
-function pickSug(el){
-  var lbl  = el.getAttribute('data-lbl') || '';
-  var cp   = el.getAttribute('data-cp')  || '';
-  var city = el.getAttribute('data-city')|| '';
-  var isNum = /^\d/.test(lbl);
-  if(!isNum){
-    var parts = lbl.split(',');
-    var a1 = document.getElementById('cli-adr1');
-    if(a1 && parts.length >= 2) a1.value = parts[0].trim();
-  }
-  if(cp)   document.getElementById('cli-cp').value   = cp;
-  if(city) document.getElementById('cli-ville').value = city;
+function pickSugCp(el){
+  var cp   = el.getAttribute('data-cp')   || '';
+  var city = el.getAttribute('data-city') || '';
+  if(cp)   document.getElementById('cli-cp').value    = cp;
+  if(city) document.getElementById('cli-ville').value  = city.toUpperCase();
   hideSug();
   if(typeof render === 'function') render();
+}
+
+function showSug(features){
+  var box = document.getElementById('geo-suggestions');
+  if(!box || !features.length){ hideSug(); return; }
+  // Position fixe par rapport au viewport (évite le clipping du sidebar overflow:auto)
+  var inp = document.getElementById('cli-adr1');
+  if(inp){
+    var rect = inp.getBoundingClientRect();
+    box.style.top   = (rect.bottom + 4) + 'px';
+    box.style.left  = rect.left + 'px';
+    box.style.width = rect.width + 'px';
+    box.style.right = 'auto';
+  }
+  var html = '';
+  for(var i=0; i<features.length; i++){
+    var p    = features[i].properties;
+    var type = p.type || 'street';           // housenumber | street | locality | municipality
+    var lbl  = p.label || '';
+    var name = p.name  || '';                // partie voie/numéro (sans ville ni CP)
+    var cp   = p.postcode || '';
+    var city = p.city  || '';
+    var l2   = lbl.replace(/&/g,'&amp;').replace(/"/g,'&quot;');
+    var n2   = name.replace(/&/g,'&amp;').replace(/"/g,'&quot;');
+    var c2   = city.replace(/&/g,'&amp;').replace(/"/g,'&quot;');
+    var cp2  = cp.replace(/"/g,'&quot;');
+    var icon = type==='municipality'?'🏘️':(type==='housenumber'?'📍':'🛣️');
+    var cpSpan = cp ? ' <span style="color:#6aacbd;font-size:11px">(' + cp + ')</span>' : '';
+    html += '<div class="geo-item"'
+          + ' onclick="pickSug(this)"'
+          + ' data-type="' + type + '"'
+          + ' data-name="' + n2 + '"'
+          + ' data-cp="'   + cp2 + '"'
+          + ' data-city="' + c2 + '">'
+          + icon + ' ' + lbl + cpSpan
+          + '</div>';
+  }
+  box.innerHTML = html;
+  box.style.display = 'block';
+  _geoIdx = -1;
+}
+
+function pickSug(el){
+  var type = el.getAttribute('data-type') || 'street';
+  var name = el.getAttribute('data-name') || '';
+  var cp   = el.getAttribute('data-cp')   || '';
+  var city = el.getAttribute('data-city') || '';
+  var a1   = document.getElementById('cli-adr1');
+  // Pour une adresse réelle (numéro, voie) → remplit le champ adresse
+  if(type !== 'municipality' && name && a1){
+    a1.value = name;
+  }
+  if(cp)   document.getElementById('cli-cp').value   = cp;
+  if(city) document.getElementById('cli-ville').value = city.toUpperCase();
+  hideSug();
+  if(typeof render === 'function') render();
+}
+
+// Navigation clavier dans les suggestions
+function geoKeyNav(e){
+  var box = document.getElementById('geo-suggestions');
+  if(!box || box.style.display==='none') return;
+  var items = box.querySelectorAll('.geo-item');
+  if(!items.length) return;
+  if(e.key==='ArrowDown'){
+    e.preventDefault();
+    _geoIdx = Math.min(_geoIdx+1, items.length-1);
+    geoHighlight(items);
+  } else if(e.key==='ArrowUp'){
+    e.preventDefault();
+    _geoIdx = Math.max(_geoIdx-1, 0);
+    geoHighlight(items);
+  } else if(e.key==='Enter' && _geoIdx>=0){
+    e.preventDefault();
+    items[_geoIdx].click();
+  } else if(e.key==='Escape'){
+    hideSug();
+  }
+}
+function geoHighlight(items){
+  items.forEach(function(it,i){ it.style.background = i===_geoIdx?'#e8f4fb':''; });
 }
 
 function hideSug(){
   var b = document.getElementById('geo-suggestions');
   if(b) b.style.display = 'none';
+  _geoIdx = -1;
 }
+
+// Style des items de suggestion
+(function(){
+  var s=document.createElement('style');
+  s.textContent='.geo-item{padding:8px 12px;cursor:pointer;border-bottom:1px solid #eef2f7;color:#0a2a3f;line-height:1.3}.geo-item:last-child{border-bottom:none}.geo-item:hover{background:#e8f4fb}';
+  document.head.appendChild(s);
+})();
 
 document.addEventListener('click', function(e){
   var b = document.getElementById('geo-suggestions');
@@ -2763,7 +2899,7 @@ function rPm(){
       'Fluvial': (pd.fluvial||0)*305,
       'Hauturier': (pd.hauturier||0)*392,
       'CRR': (pd.crr||0)*117,
-      'Inscription Code': (pd.code||0)*25,
+      'Inscription Code': (pd.code||0)*33.33,
       'Code supplémentaire': (pd.codeSupp||0)*183
     };
     var starName='—', starVal=0;
@@ -2825,7 +2961,7 @@ function rPm(){
       +'<tr><td>🌊 Fluvial</td><td style="text-align:center;font-weight:700;font-size:16px">'+(pd.fluvial||0)+'</td><td style="text-align:center"><span class="kd pos">'+pctF+'%</span></td><td style="text-align:right;font-family:monospace">~'+Math.round((pd.fluvial||0)*305).toLocaleString()+' €</td></tr>'
       +'<tr><td>⚓ Hauturier</td><td style="text-align:center;font-weight:700;font-size:16px">'+(pd.hauturier||0)+'</td><td style="text-align:center"><span class="kd wn">'+pctH+'%</span></td><td style="text-align:right;font-family:monospace">~'+Math.round((pd.hauturier||0)*392).toLocaleString()+' €</td></tr>'
       +'<tr><td>📻 CRR</td><td style="text-align:center;font-weight:700;font-size:16px">'+(pd.crr||0)+'</td><td style="text-align:center"><span class="kd wn">'+pctR+'%</span></td><td style="text-align:right;font-family:monospace">~'+Math.round((pd.crr||0)*117).toLocaleString()+' €</td></tr>'
-      +'<tr style="border-top:2px solid var(--bd)"><td style="color:var(--tm);font-size:12px">📝 Inscription Code (25€)</td><td style="text-align:center;font-weight:700;font-size:16px">'+(pd.code||0)+'</td><td style="text-align:center;color:var(--tm)">—</td><td style="text-align:right;font-family:monospace">~'+Math.round((pd.code||0)*25).toLocaleString()+' €</td></tr>'
+      +'<tr style="border-top:2px solid var(--bd)"><td style="color:var(--tm);font-size:12px">📝 Inscription Code (33,33€ HT)</td><td style="text-align:center;font-weight:700;font-size:16px">'+(pd.code||0)+'</td><td style="text-align:center;color:var(--tm)">—</td><td style="text-align:right;font-family:monospace">~'+Math.round((pd.code||0)*33.33).toLocaleString()+' €</td></tr>'
       +'<tr><td style="color:var(--tm);font-size:12px">📝 Code supplémentaire (183€)</td><td style="text-align:center;font-weight:700;font-size:16px">'+(pd.codeSupp||0)+'</td><td style="text-align:center;color:var(--tm)">—</td><td style="text-align:right;font-family:monospace">~'+Math.round((pd.codeSupp||0)*183).toLocaleString()+' €</td></tr>'
       +'<tr><td>⏱ Perf 1h</td><td style="text-align:center;font-weight:700;font-size:16px">'+(pd.perf1||0)+'</td><td style="text-align:center;color:var(--tm)">—</td><td style="text-align:right;font-family:monospace">~'+Math.round((pd.perf1||0)*79).toLocaleString()+' €</td></tr>'
       +'<tr><td>⏱ Perf 3h</td><td style="text-align:center;font-weight:700;font-size:16px">'+(pd.perf3||0)+'</td><td style="text-align:center;color:var(--tm)">—</td><td style="text-align:right;font-family:monospace">~'+Math.round((pd.perf3||0)*225).toLocaleString()+' €</td></tr>'
@@ -2986,7 +3122,7 @@ function rPm(){
       +lv('🌊','Fluvial PRESTIGE',458,cc.fluvialPres,Math.round((pd.fluvial||0)*((pd.mixPres||6.7)/100)))
       +lv('⚓','Hauturier',392,cc.hauturier,pd.hauturier||0)
       +lv('📻','CRR Radio',117,cc.crr,pd.crr||0)
-      +lv('📝','Inscription Code',25,cc.code,pd.code||0)
+      +lv('📝','Inscription Code',33.33,cc.code,pd.code||0)
       +lv('📝','Code supplémentaire',183,cc.codeSupp,pd.codeSupp||0)
       +lv('⏱','Perfectionnement 1h',79,cc.perf,pd.perf1||0)
       +lv('⏱','Perfectionnement 3h',225,coutComplet(0,essencePerf*3,formateurPerf*3,0,0),pd.perf3||0)
@@ -3215,6 +3351,20 @@ function render(){
   const timbreOn = document.getElementById('timbre-check').checked;
   const timbreVal = parseFloat(document.getElementById('timbre-val').value) || 78;
 
+  const _paiementCheck2 = document.getElementById('paiement-check');
+  const _paiementOn2 = _paiementCheck2 && _paiementCheck2.checked && fac_docType==='FACTURE';
+  const _paiementDateEl2 = document.getElementById('paiement-date');
+  const _paiementDateVal2 = _paiementDateEl2 ? _paiementDateEl2.value : '';
+  var _paiementDateFmt2 = '';
+  if(_paiementDateVal2){ var _pp2=_paiementDateVal2.split('-'); if(_pp2.length===3) _paiementDateFmt2=_pp2[2]+'/'+_pp2[1]+'/'+_pp2[0]; }
+  const stampHTML = _paiementOn2 ? `
+    <div style="text-align:right;margin:10px 24px 0 0">
+      <div style="display:inline-block;border:3.5px solid #c0392b;border-radius:8px;padding:7px 22px;transform:rotate(-8deg);opacity:.82;color:#c0392b">
+        <div style="font-size:28px;font-weight:900;letter-spacing:5px;font-family:'Dosis',sans-serif;text-transform:uppercase;line-height:1">PAYÉ</div>
+        ${_paiementDateFmt2 ? `<div style="font-size:12px;font-weight:700;letter-spacing:1.5px;margin-top:3px;text-align:center">le ${_paiementDateFmt2}</div>` : ''}
+      </div>
+    </div>` : '';
+
   const totalQty = fac_lines.reduce((a,l)=>a+l.qty,0);
   const timbreTotal = timbreOn ? timbreVal * totalQty : 0;
 
@@ -3300,6 +3450,7 @@ function render(){
           <a href="https://g.page/r/CUejqR6z7BzgEAE/review" style="display:inline-block;margin-top:5px;background:#1479ad;color:#fff;padding:4px 14px;border-radius:20px;font-size:11px;text-decoration:none;font-weight:600">⭐ Déposer mon avis</a>
         </div>
       </div>` : ''}
+      ${stampHTML}
       <div class="fh-footer">
         <div class="slogan">NAUTIC HOLIDAYS — PERMIS DE RÊVER</div>
         ${EMETTEUR.adr1}, ${EMETTEUR.adr2}, ${EMETTEUR.cp} ${EMETTEUR.ville}<br>
@@ -3307,37 +3458,6 @@ function render(){
         <div class="fh-legal">SIRET ${EMETTEUR.siret} · Agrément ${EMETTEUR.agrement} · TVA 20%</div>
       </div>
     </div>`;
-}
-
-// ── PDF ────────────────────────────────────────────────────────────────
-function downloadPDF(){
-  const num = document.getElementById('doc-num').value || 'document';
-  const cli = document.getElementById('cli-nom').value || 'client';
-  const filename = `${fac_docType}-${num}-${cli}.pdf`.replace(/\s+/g,'-');
-  const el = document.getElementById('facture-html');
-
-  html2canvas(el, {
-    scale: 2,
-    useCORS: true,
-    letterRendering: true,
-    scrollX: 0,
-    scrollY: 0,
-    backgroundColor: '#ffffff',
-    width: el.scrollWidth,
-    height: el.scrollHeight
-  }).then(function(canvas){
-    const imgData = canvas.toDataURL('image/jpeg', 0.98);
-    const pdfW = 210;
-    const pdfH = Math.round((canvas.height / canvas.width) * pdfW);
-    const {jsPDF} = window.jspdf;
-    const pdf = new jsPDF({
-      orientation: 'portrait',
-      unit: 'mm',
-      format: [pdfW, pdfH]
-    });
-    pdf.addImage(imgData, 'JPEG', 0, 0, pdfW, pdfH, '', 'FAST');
-    pdf.save(filename);
-  });
 }
 
 // ── Sauvegarde ─────────────────────────────────────────────────────────
@@ -3358,6 +3478,8 @@ function getFormData(){
     note: document.getElementById('doc-note').value,
     timbreOn: document.getElementById('timbre-check').checked,
     timbreVal: document.getElementById('timbre-val').value,
+    paiementCheck: document.getElementById('paiement-check') ? document.getElementById('paiement-check').checked : false,
+    paiementDate: document.getElementById('paiement-date') ? document.getElementById('paiement-date').value : '',
     fac_lines: [...fac_lines],
     savedAt: new Date().toISOString()
   };
@@ -3415,6 +3537,12 @@ function loadDocument(key){
     document.getElementById('doc-note').value = d.note||'';
     document.getElementById('timbre-check').checked = d.timbreOn||false;
     document.getElementById('timbre-val').value = d.timbreVal||78;
+    if(document.getElementById('paiement-check')){
+      document.getElementById('paiement-check').checked = d.paiementCheck||false;
+      togglePaiementDate();
+      if(d.paiementDate && document.getElementById('paiement-date'))
+        document.getElementById('paiement-date').value = d.paiementDate;
+    }
     fac_lines = d.fac_lines||[];
     renderLines(); render();
   }catch(e){}
@@ -3436,6 +3564,10 @@ function resetForm(){
   document.getElementById('cli-ville').value='';
   document.getElementById('cli-email').value='';
   document.getElementById('timbre-check').checked=false;
+  if(document.getElementById('paiement-check')){
+    document.getElementById('paiement-check').checked=false;
+    togglePaiementDate();
+  }
   fac_lines=[];
   const today=new Date();
   document.getElementById('doc-date').value=today.toISOString().split('T')[0];
@@ -3787,6 +3919,8 @@ async function ghPull(){
   Sources : Tous certifiés SOGECA · 2022 SARL 20 mois (17/04/2023) · 2023 EURL 12 mois (09/04/2024) · 2024 (06/05/2025) · 2025 (27/04/2026) · CA réel 2025 : 152 367 € (TPE PayPal 100 248 € + WooCommerce 43 650 € + virements 5 580 €)
 </div>
 
+<!-- Portal dropdown géocodage — hors sidebar pour éviter overflow:auto -->
+<div id="geo-suggestions" style="display:none;position:fixed;background:#fff;border:1.5px solid var(--oc);border-radius:8px;z-index:99999;box-shadow:0 6px 20px rgba(20,121,173,.18);font-size:13px;font-family:'Dosis',sans-serif;max-height:220px;overflow-y:auto"></div>
 
 </body>
 </html>
